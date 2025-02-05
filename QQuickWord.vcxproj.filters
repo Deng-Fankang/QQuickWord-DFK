@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="Header Files\uic">
+      <UniqueIdentifier>{aae74e54-6ee1-4adf-bfdd-83a404d03004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\module">
+      <UniqueIdentifier>{00f46aca-cd84-4351-88a5-c0acc3460735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\module\WordEdit">
+      <UniqueIdentifier>{f13c39c7-359a-4f16-9101-cd456f895f12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\module\WordExport">
+      <UniqueIdentifier>{a949c893-af08-4510-830c-f68f3e88c624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\module\WordImport">
+      <UniqueIdentifier>{465e7ede-b3b1-4a40-83c0-cd0c7ef1a5a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{5e5c8b19-b559-4ae0-96c5-dd4bd0568b35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common">
+      <UniqueIdentifier>{5d968634-a4bf-48ed-baa0-01450a134603}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{b0e5fd3a-95cc-4e53-9afd-0268158c9889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config\qss">
+      <UniqueIdentifier>{f27540e3-39cf-4dff-ac95-ed084e35703a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="qquickword.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="include\qquickword.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\common\qulistmodel.h">
+      <Filter>Header Files\common</Filter>
+    </QtMoc>
+    <QtMoc Include="include\wordeditwidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\wordexportwidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\wordimportwidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\sharemgr.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="form\qquickword.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\wordedit\wordeditwidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\wordimport\wordimportwidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\wordexport\wordexportwidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\wordedit\wordeditwidget.ui">
+      <Filter>Source Files\module\WordEdit</Filter>
+    </QtUic>
+    <QtUic Include="src\wordexport\wordexportwidget.ui">
+      <Filter>Source Files\module\WordExport</Filter>
+    </QtUic>
+    <QtUic Include="src\wordimport\wordimportwidget.ui">
+      <Filter>Source Files\module\WordImport</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\qquickword.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordedit\wordeditwidget.cpp">
+      <Filter>Source Files\module\WordEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordimport\wordimportwidget.cpp">
+      <Filter>Source Files\module\WordImport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordexport\wordexportwidget.cpp">
+      <Filter>Source Files\module\WordExport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordimport\wordimport.cpp">
+      <Filter>Source Files\module\WordImport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordexport\wordexport.cpp">
+      <Filter>Source Files\module\WordExport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordedit\wordedit.cpp">
+      <Filter>Source Files\module\WordEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\module_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\qulistmodel.cpp">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\quitemdelegate.cpp">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordimport\importwidgetdelegate.cpp">
+      <Filter>Source Files\module\WordImport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\qutreemodel.cpp">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordoperate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\worddefine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordexport\wordexportmodel.cpp">
+      <Filter>Source Files\module\WordExport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\baseframe.cpp">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordexport\exportdelegate.cpp">
+      <Filter>Source Files\module\WordExport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordexport\exportview.cpp">
+      <Filter>Source Files\module\WordExport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sharemgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\timertest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordimport\wordimportmodel.cpp">
+      <Filter>Source Files\module\WordImport</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sharefunc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\common\treeitem.cpp">
+      <Filter>Source Files\common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\uic\ui_qquickword.h">
+      <Filter>Header Files\uic</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basemodule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\singleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\module_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uic\ui_wordeditwidget.h">
+      <Filter>Header Files\uic</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uic\ui_wordexportwidget.h">
+      <Filter>Header Files\uic</Filter>
+    </ClInclude>
+    <ClInclude Include="include\uic\ui_wordimportwidget.h">
+      <Filter>Header Files\uic</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\quitemdelegate.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\importwidgetdelegate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\qutreemodel.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wordedit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wordexport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wordimport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wordoperate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\worddefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wordexportmodel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\baseframe.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exportdelegate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\exportview.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\timertest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wordimportmodel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sharefunc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\treeitem.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config\qss\titletree.qss">
+      <Filter>config\qss</Filter>
+    </None>
+  </ItemGroup>
+</Project>

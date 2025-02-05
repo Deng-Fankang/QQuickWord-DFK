@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Type="http://schemas.microsoft.com/packaging/2010/07/manifest" Target="/Interop.Microsoft.Office.Interop.Word.PieroViano.nuspec" Id="R81deb4126f4c4f5f" />
+  <Relationship Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="/package/services/metadata/core-properties/a7a8d6c35b024e6a829f1cfafa498582.psmdcp" Id="R0b4e1c70d0ff4d35" />
+</Relationships>

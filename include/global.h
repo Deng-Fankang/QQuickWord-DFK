@@ -1,0 +1,4 @@
+#pragma once
+
+#define EXPORT_DROP_STR "EXPORT_DROP"
+#define IMPORT_DROP_STR "IMPORT_DROP"
