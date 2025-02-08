@@ -1,6 +1,7 @@
 #include "timertest.h"
 #include "qdebug.h"
 #include "qdatetime.h"
+#include "qcache.h"
 
 TimerTest::TimerTest(QObject* parent):
 	QThread(parent)
