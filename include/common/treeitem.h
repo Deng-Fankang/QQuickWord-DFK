@@ -19,6 +19,7 @@ public:
 
 	ITreeItemData(TreeItem* owner_) { owner = owner_; data_type = ItemDataType::Unknown_Data; }
 
+	virtual ~ITreeItemData() {};
 	virtual void SetParent(TreeItem* parent_, int index = -1) = 0;
 
 	enum class ItemDataType data_type;
@@ -30,6 +31,8 @@ class TitleItemData: public ITreeItemData
 public:
 	TitleItemData(TreeItem* owner_, TitleContentNode* node);
 	void SetParent(TreeItem* dst_parent_, int index = -1) override;
+	void RemoveChild(TreeItem* child_);
+
 	void SetTitleContentNode(TitleContentNode* node);
 	TitleContentNode* GetTitleContentNode();
 	~TitleItemData();
@@ -45,6 +48,8 @@ public:
 	TreeItem(TreeItem* parent_ = nullptr, int index = -1);
 
 	void SetParent(TreeItem* parent_, int index = -1);
+	
+	void RemoveChildren(int start, int count);
 
 	~TreeItem();
 

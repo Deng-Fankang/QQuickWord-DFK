@@ -29,9 +29,6 @@ bool ExportTreeModel::setData(const QModelIndex& index, const QVariant& value, i
 		{
 			TitleContentNode* node = static_cast<TitleContentNode*>(value.value<void*>());
 			item->item_data = new TitleItemData(item, node);
-
-			
-			TreeItem* parent_item = TreeItemPtr(index.parent());
 		}
 		emit dataChanged(index, index);
 		return true;
@@ -66,15 +63,7 @@ bool ExportTreeModel::removeRows(int row, int count, const QModelIndex& parent)
 {
 	beginRemoveRows(parent, row, row + count - 1);
 	TreeItem* parent_item = TreeItemPtr(parent);
-	int total_count = rowCount(parent);
-	for (int idx = row; idx < row + count; idx++) {
-		delete parent_item->children[idx];
-		if (idx + count < total_count) {
-			parent_item->children[idx] = parent_item->children[idx + count];
-			parent_item->children[idx + count] = nullptr;
-		}
-	}
-	parent_item->children.resize(total_count - count);
+	parent_item->RemoveChildren(row, count);
 	endRemoveRows();
 	return true;
 }
@@ -85,7 +74,8 @@ bool ExportTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, i
 	TreeItem* source_parent_item = TreeItemPtr(sourceParent);
 	TreeItem* dst_parent_item = TreeItemPtr(destinationParent);
 
-	for (int i = 0; i < count; i++) {
+	for (int i = 0; i < count; i++) 
+	{
 		TreeItem* move_item = source_parent_item->children[sourceRow + i];
 		
 		if (destinationChild + i < rowCount(destinationParent)) {

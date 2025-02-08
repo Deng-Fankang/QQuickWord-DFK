@@ -57,6 +57,7 @@ public:
 	AreaContent(){};
 	virtual AreaType GetAreaType() = 0;
 	virtual void PrintContent() = 0;
+	virtual ~AreaContent() {};
 public:
 };
 

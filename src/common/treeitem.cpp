@@ -36,7 +36,17 @@ void TitleItemData::SetParent(TreeItem* dst_parent, int index)
 	}
 	AreaContent* content = src_parent_node->removeChildTitle(ptr_node);
 	ptr_node->setParent(dst_parent_node);
+
+	//可能造成插入的标题与实际不一致
 	dst_parent_node->InsertAreaContent(content, index);
+}
+
+void TitleItemData::RemoveChild(TreeItem* child_)
+{
+	assert(child_->item_data->data_type == ItemDataType::Title_Data);
+	TitleContentNode* child_node = dynamic_cast<TitleItemData*>(child_->item_data)->ptr_node;
+	AreaContent* content = ptr_node->removeChildTitle(child_node);
+	delete content;
 }
 
 void TitleItemData::SetTitleContentNode(TitleContentNode* node)
@@ -51,6 +61,10 @@ TitleContentNode* TitleItemData::GetTitleContentNode()
 
 TitleItemData::~TitleItemData()
 {
+	if (ptr_node)
+	{
+		delete ptr_node;
+	}
 }
 
 
@@ -72,6 +86,7 @@ TreeItem::TreeItem(TreeItem* parent_, int index)
 
 void TreeItem::SetParent(TreeItem* parent_, int index)
 {
+	assert(parent_->item_data->data_type == ITreeItemData::ItemDataType::Title_Data);
 	if (parent == parent_ && parent->children.indexOf(this) == index)
 	{
 		return;
@@ -86,17 +101,38 @@ void TreeItem::SetParent(TreeItem* parent_, int index)
 	}
 	else
 	{
-		parent->children.insert(index, this);
+		parent_->children.insert(index, this);
 	}
 	item_data->SetParent(parent_, index);
 	parent = parent_;
 }
+
+void TreeItem::RemoveChildren(int start, int count)
+{
+	assert(item_data->data_type == ITreeItemData::ItemDataType::Title_Data);
+	int total_count = children.size();
+	for (int idx = start; idx < start + count; idx++)
+	{
+		dynamic_cast<TitleItemData*>(item_data)->RemoveChild(children[idx]);
+		delete children[idx];
+		if (idx + count < total_count) {
+			children[idx] = children[idx + count];
+			children[idx + count] = nullptr;
+		}
+	}
+	children.resize(total_count - count);
+}
+
 
 TreeItem::~TreeItem()
 {
 	for (TreeItem* child : children)
 	{
 		assert(child != nullptr);
+		if (child->item_data)
+		{
+			delete item_data;
+		}
 		delete child;
 	}
 }
