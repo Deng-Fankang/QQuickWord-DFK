@@ -100,4 +100,5 @@ void ImportTitleDelegate::setEditorData(QWidget* editor, const QModelIndex& inde
 void ImportTitleDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
     TreeTitleItemDelegate::setModelData(editor, model, index);
+    //²âÊÔÐÞ¸Ä²Ö¿âÃû
 }
