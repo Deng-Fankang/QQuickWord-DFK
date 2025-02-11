@@ -19,16 +19,65 @@ bool ExportTreeModel::setData(const QModelIndex& index, const QVariant& value, i
 	if (index.isValid())
 	{
 		TreeItem* item = TreeItemPtr(index);
-		if (role == Qt::EditRole)
+		switch (role)
+		{
+		case Qt::DisplayRole:
+		{
+			QString val_str = value.toString();
+			item->user_data[Qt::DisplayRole] = val_str;
+			break;
+		}
+		case Qt::EditRole:
 		{
 			QString val_str = value.toString();
 			item->user_data[Qt::DisplayRole] = val_str;
 			item->user_data[Qt::EditRole] = val_str;
+			break;
 		}
-		else if(role == Qt::TitleContentRole)
+		case Qt::TitleContentRole:
+		case Qt::TextContentRole:
+		case Qt::TableContentRole:
+		case Qt::ImageContentRole:
+		case Qt::ListContentRole:
 		{
-			TitleContentNode* node = static_cast<TitleContentNode*>(value.value<void*>());
-			item->item_data = new TitleItemData(item, node);
+			TreeItem* patent_item = TreeItemPtr(index.parent());
+			TitleAreaContent* parent_area = dynamic_cast<TitleAreaContent*>(patent_item->item_data->GetAreaContent());
+			
+			if (role == Qt::TitleContentRole)
+			{
+				TitleAreaContent* content = static_cast<TitleAreaContent*>(value.value<void*>());
+				item->item_data = new TitleItemData(item, content);
+				parent_area->InsertAreaContent(content, index.row());
+			}
+			else if (role == Qt::TextContentRole)
+			{
+				TextAreaContent* content = static_cast<TextAreaContent*>(value.value<void*>());
+				item->item_data = new TextItemData(item, content);
+				parent_area->InsertAreaContent(content, index.row());
+			}
+			else if (role == Qt::TableContentRole)
+			{
+				TableAreaContent* content = static_cast<TableAreaContent*>(value.value<void*>());
+				item->item_data = new TableItemData(item, content);
+				parent_area->InsertAreaContent(content, index.row());
+			}
+			else if (role == Qt::ImageContentRole)
+			{
+				ImageAreaContent* content = static_cast<ImageAreaContent*>(value.value<void*>());
+				item->item_data = new ImageItemData(item, content);
+				parent_area->InsertAreaContent(content, index.row());
+			}
+			else
+			{//List
+				ListAreaContent* content = static_cast<ListAreaContent*>(value.value<void*>());
+				item->item_data = new ListItemData(item, content);
+				parent_area->InsertAreaContent(content, index.row());
+			}
+			break;
+		}
+		
+		default:
+			break;
 		}
 		emit dataChanged(index, index);
 		return true;
@@ -40,9 +89,19 @@ Qt::ItemFlags ExportTreeModel::flags(const QModelIndex& index) const
 {
 	if (index.parent() == QModelIndex())
 	{
+		return QAbstractItemModel::flags(index);
+	}
+	if (index.parent().parent() == QModelIndex())
+	{
 		return QAbstractItemModel::flags(index) | Qt::ItemIsDropEnabled;
 	}
-	return Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | QAbstractItemModel::flags(index);
+	TreeItem* item = TreeItemPtr(index);
+	Qt::ItemFlags ret = Qt::ItemIsDragEnabled | QAbstractItemModel::flags(index);
+	if (item->item_data->GetAreaContent()->GetAreaType() == TITLE_AREA)
+	{
+		ret |= (Qt::ItemIsEditable | Qt::ItemIsDropEnabled);
+	}
+	return ret;
 }
 
 bool ExportTreeModel::insertRows(int row, int count, const QModelIndex& parent)
@@ -76,7 +135,7 @@ bool ExportTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, i
 
 	for (int i = 0; i < count; i++) 
 	{
-		TreeItem* move_item = source_parent_item->children[sourceRow + i];
+		TreeItem* move_item = source_parent_item->getChildren()[sourceRow + i];
 		
 		if (destinationChild + i < rowCount(destinationParent)) {
 			move_item->SetParent(dst_parent_item, destinationChild + i);
@@ -136,29 +195,18 @@ bool ExportTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
 		ImportTreeModel* title_tree_model = WordImport::Module::InstancePtr()->GetImportTreeModel();
 		TreeItem* drop_item = title_tree_model->TreeItemPtr(*drag_index);
 
-		
-		if (drop_item->item_data->data_type == ITreeItemData::ItemDataType::Title_Data)
-		{
-			TitleContentNode* drop_node = dynamic_cast<TitleItemData*>(drop_item->item_data)->GetTitleContentNode();
-			TitleContentNode* drop_node_cp = GetTitleContentNode(drop_node);
+		AreaContent* drop_area = drop_item->item_data->GetAreaContent();
 
-			TitleContentNode* parent_item_node = dynamic_cast<TitleItemData*>(parent_item->item_data)->GetTitleContentNode();
-			if (row == -1 && column == -1)
-			{
-				//TreeItem* tree_item = GetTitleTreeFromNode(drop_node_cp);
-				int insert_row = rowCount(parent);
-				insertTreeRows(insert_row, parent, drop_node_cp);
-				// 父标题节点插入新增树内容
-				TitleAreaContent* content = new TitleAreaContent(drop_node_cp);
-				parent_item_node->InsertAreaContent(content);
-			}
-			else
-			{
-				insertTreeRows(row, parent, drop_node_cp);
-				TitleAreaContent* content = new TitleAreaContent(drop_node_cp);
-				parent_item_node->InsertAreaContent(content, row);
-			}
+		if (row == -1 && column == -1)
+		{
+			int insert_row = rowCount(parent);
+			insertTreeRows(insert_row, parent, drop_area);
 		}
+		else
+		{
+			insertTreeRows(row, parent, drop_area);
+		}
+		delete drag_index;
 		return true;
 	}
 	else
@@ -189,6 +237,11 @@ bool ExportTreeModel::canDropMimeData(const QMimeData* data, Qt::DropAction acti
 	if (parent == QModelIndex()) {
 		return false;
 	}
+	TreeItem* parent_item = TreeItemPtr(parent);
+	if (parent_item->item_data->GetAreaContent()->GetAreaType() != TITLE_AREA)
+	{
+		return false;
+	}
 	const QStringList modelTypes = mimeTypes();
 	for (int i = 0; i < modelTypes.count(); ++i) {
 		if (data->hasFormat(modelTypes.at(i)))
@@ -197,19 +250,62 @@ bool ExportTreeModel::canDropMimeData(const QMimeData* data, Qt::DropAction acti
 	return false;
 }
 
-void ExportTreeModel::insertTreeRows(int insert_row, const QModelIndex& parent, TitleContentNode* root_node)
-{//root_node 需要有完整的父子关系
+AreaContent* ExportTreeModel::insertTreeRows(int insert_row, const QModelIndex& parent, AreaContent* area_content)
+{
 	insertRow(insert_row, parent);
 	QModelIndex insert_index = index(insert_row, 0, parent);
-	QMap<int, QVariant> roles = {
-		{Qt::EditRole, root_node->title},
-		{Qt::TitleContentRole, QVariant::fromValue((void*)root_node)},
-	};
-	setItemData(insert_index, roles);
-	int i = 0;
-	for (auto it = root_node->GetChildTitleList().cbegin(); it != root_node->GetChildTitleList().cend(); it++, i++)
+	TreeItem* t1 = TreeItemPtr(insert_index);
+	TreeItem* t2 = TreeItemPtr(parent);
+	QMap<int, QVariant> roles = {};
+	if (area_content->GetAreaType() == TEXT)
 	{
-		assert(root_node == (*it)->GetParent());
-		insertTreeRows(i, insert_index, (*it));
+		TextAreaContent* src_content = dynamic_cast<TextAreaContent*>(area_content);
+		TextAreaContent* content = new TextAreaContent(*src_content);
+		roles[Qt::DisplayRole] = QString::fromLocal8Bit("文本");;
+		roles[Qt::TextContentRole] = QVariant::fromValue((void*)content);
+		setItemData(insert_index, roles);
+		return content;
+	}
+	else if (area_content->GetAreaType() == TABLE)
+	{
+		TableAreaContent* src_content = dynamic_cast<TableAreaContent*>(area_content);
+		TableAreaContent* content = new TableAreaContent(*src_content);
+		roles[Qt::DisplayRole] = QString::fromLocal8Bit("表");
+		roles[Qt::TableContentRole] = QVariant::fromValue((void*)content);
+		setItemData(insert_index, roles);
+		return content;
+	}
+	else if (area_content->GetAreaType() == IMAGE)
+	{
+		ImageAreaContent* src_content = dynamic_cast<ImageAreaContent*>(area_content);
+		ImageAreaContent* content = new ImageAreaContent(*src_content);
+		roles[Qt::DisplayRole] = QString::fromLocal8Bit("图");
+		roles[Qt::ImageContentRole] = QVariant::fromValue((void*)content);
+		setItemData(insert_index, roles);
+		return content;
+	}
+	else if (area_content->GetAreaType() == LIST)
+	{
+		ListAreaContent* src_content = dynamic_cast<ListAreaContent*>(area_content);
+		ListAreaContent* content = new ListAreaContent(*src_content);
+		roles[Qt::DisplayRole] = QString::fromLocal8Bit("清单");
+		roles[Qt::ListContentRole] = QVariant::fromValue((void*)content);
+		setItemData(insert_index, roles);
+		return content;
+	}
+	else
+	{//TITLE_AREA
+		TitleAreaContent* src_content = dynamic_cast<TitleAreaContent*>(area_content);
+		TitleAreaContent* content = new TitleAreaContent(src_content->title);
+		content->title_format = src_content->title_format;
+		roles[Qt::EditRole] = content->title;
+		roles[Qt::TitleContentRole] = QVariant::fromValue((void*)content);
+		setItemData(insert_index, roles);
+		int i = 0;
+		for (auto it = src_content->GetContentList().cbegin(); it != src_content->GetContentList().cend(); it++, i++)
+		{
+			insertTreeRows(i, insert_index, (*it));
+		}
+		return content;
 	}
 }

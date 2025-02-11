@@ -44,21 +44,11 @@ namespace Qt
 	enum _ItemDataRole
 	{
 		TitleContentRole = Qt::UserRole,
-		AreaContentRole = Qt::UserRole + 1,
+		TextContentRole = Qt::UserRole + 1,
+		TableContentRole = Qt::UserRole + 2,
+		ImageContentRole = Qt::UserRole + 3,
+		ListContentRole = Qt::UserRole + 4,
 	};
-};
-
-class TitleContentNode;
-
-
-class AreaContent
-{
-public:
-	AreaContent(){};
-	virtual AreaType GetAreaType() = 0;
-	virtual void PrintContent() = 0;
-	virtual ~AreaContent() {};
-public:
 };
 
 struct TextFormat {
@@ -88,7 +78,6 @@ struct TextFormat {
 	QString font_name_fareast;
 	QString font_name_ascii;
 	QString style_name;
-
 
 	TextFormat& operator=(const TextFormat& cp)
 	{
@@ -247,15 +236,48 @@ struct ImageFormat {
 	}
 };
 
+const static TextFormat DEFAULT_TEXT_AREA_FORMAT = {
+	0, 0, 10.5, 0, 0,
+	12, 0, 0, 0, 0,
+	0, 0, 0, 0, 0,
+	0, 3, "等线", "+中文正文", "+西文正文", "正文",
+};
+
+const static TextFormat DEFAULT_TITLE_AREA_FORMAT = {
+	1, 0, 16, 0, 0,
+	21, 5, 0, 0, 0,
+	0, 0, 13, 13, 0,
+	0, 3, "等线", "+中文正文", "+西文正文", "标题 3",
+};
+
+class TitleAreaContent;
+
+class AreaContent
+{
+public:
+	AreaContent(TitleAreaContent* parent_area_ = nullptr)
+	{
+		parent_area = parent_area_;
+	}
+	virtual AreaType GetAreaType() const = 0;
+
+	void setParent(TitleAreaContent* parent_area_) { parent_area = parent_area_; }
+	TitleAreaContent* GetParent() { return parent_area; }
+	virtual void PrintContent() = 0;
+
+	virtual ~AreaContent() { }
+protected:
+	TitleAreaContent* parent_area;
+};
 
 class TextAreaContent :public AreaContent
 {
 public:
 
-	TextAreaContent(const QString& text = "", const TextFormat& f = {});
+	TextAreaContent(const QString& text = "", const TextFormat& f = DEFAULT_TEXT_AREA_FORMAT);
 	TextAreaContent(const TextAreaContent& cp);
 
-	AreaType GetAreaType() {
+	AreaType GetAreaType() const {
 		return TEXT;
 	}
 
@@ -299,7 +321,7 @@ public:
 	TableAreaContent(const QVector<QVector<CellAreaContent>>& data, const TableFormat& format, QString title = "");
 	TableAreaContent(const TableAreaContent& cp);
 
-	AreaType GetAreaType() {
+	AreaType GetAreaType() const {
 		return TABLE;
 	}
 
@@ -337,7 +359,7 @@ public:
 		list_data.push_back(list_content);
 	}
 
-	AreaType GetAreaType() {
+	AreaType GetAreaType() const {
 		return LIST;
 	}
 
@@ -362,7 +384,7 @@ public:
 
 	ImageAreaContent(const ImageAreaContent& cp);
 
-	AreaType GetAreaType() {
+	AreaType GetAreaType() const {
 		return IMAGE;
 	}
 
@@ -376,28 +398,33 @@ public:
 };
 
 
+//class TitleAreaContent :public AreaContent
+//{
+//
+//public:
+//	TitleAreaContent(TitleAreaContent* node_);
+//	~TitleAreaContent() { if (node) delete node; };
+//
+//	AreaType GetAreaType() override {
+//		return TITLE_AREA;
+//	}
+//
+//	void PrintContent() override;
+//public:
+//	TitleAreaContent* node;
+//};
+
 class TitleAreaContent :public AreaContent
 {
-
 public:
-	TitleAreaContent(TitleContentNode* node_);
-	~TitleAreaContent() { if (node) delete node; };
 
-	AreaType GetAreaType() override {
+	TitleAreaContent(const QString& title_ = "", TitleAreaContent* parent_area_=nullptr);
+	~TitleAreaContent();
+	AreaType GetAreaType() const override
+	{
 		return TITLE_AREA;
 	}
-
 	void PrintContent() override;
-public:
-	TitleContentNode* node;
-};
-
-class TitleContentNode
-{
-public:
-
-	TitleContentNode(const QString& title_ = "");
-	~TitleContentNode();
 
 	AreaContent* AppendTextAreaContent(QString context, TextFormat f);
 
@@ -413,26 +440,25 @@ public:
 
 	void InsertAreaContent(AreaContent* content, int insert_idx = -1);
 
-	TitleContentNode* GetParentNode(int level);
+	TitleAreaContent* GetParentAreaLevel(int level);
 
-	TitleContentNode* GetChildNode(int index);
+	TitleAreaContent* GetChildNode(int index);
 
-	const QList<TitleContentNode*>& GetChildTitleList() const { return child_title_list; }
+	const QList<TitleAreaContent*>& GetChildTitleList() const { return child_title_list; }
 	const QList<AreaContent*>& GetContentList() const{ return content_list; }
 	const QVector<int>& GetIndexFromRoot() const { return index_from_root; }
-	TitleContentNode* GetParent() { return parent; }
-	void setParent(TitleContentNode* parent_) { parent = parent_; }
+
 	int GetTitleLevel() { return level; }
 
-	AreaContent* removeChildTitle(TitleContentNode* node);
+	//AreaContent* removeChildTitle(TitleAreaContent* node);
+	bool removeAreaContent(AreaContent* content);
 
 	int GetIndex();
 
 
 private:
 	QList<AreaContent*> content_list;
-	QList<TitleContentNode*> child_title_list;
-	TitleContentNode* parent;
+	QList<TitleAreaContent*> child_title_list;
 	int level;
 	
 	QVector<int> index_from_root;

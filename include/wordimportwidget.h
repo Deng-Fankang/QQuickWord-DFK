@@ -30,7 +30,7 @@ namespace WordImport {
 		void SetWidget();
 
 		void OnSelectFile(const QModelIndex& current, const QModelIndex& previous);
-		void OnSelectTitle(const QModelIndex& current, const QModelIndex& previous);
+		void OnSelectItem(const QModelIndex& current, const QModelIndex& previous);
 		void ImportFilesChange();
 
 	private:

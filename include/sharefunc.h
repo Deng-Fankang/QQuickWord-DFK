@@ -2,7 +2,7 @@
 #include "qutreemodel.h"
 #include "worddefine.h"
 
-extern TreeItem* GetTitleTreeFromNode(const TitleContentNode* root_title);
+extern TreeItem* GetTitleTreeFromAreaContent(const AreaContent* area_content);
 extern void DeleteTitleTree(TreeItem* root);
-extern TitleContentNode* GetTitleContentNode(TitleContentNode* node, TitleContentNode* parent = nullptr);
+//extern TitleAreaContent* GetTitleContentNode(TitleAreaContent* node, TitleAreaContent* parent = nullptr);
 //123

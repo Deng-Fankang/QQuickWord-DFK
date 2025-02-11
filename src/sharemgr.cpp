@@ -18,7 +18,7 @@ ImportFileData CreateImportFile(QString file_path) {
 
 
     WordReadOperate wread(file_path);
-    TitleContentNode* root = wread.CreateWordNode();
+    TitleAreaContent* root = wread.CreateWordNode();
     QFileInfo file_info(file_path);
     return ImportFileData(file_info.fileName(), root);
 }

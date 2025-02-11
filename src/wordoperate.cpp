@@ -199,7 +199,7 @@ void GetTextAreaInfo(QAxObject* range, QVector<QString>& text_list, QVector<Text
     }
 }
 
-void AppendContents(TitleContentNode* node, QAxObject* doc, int start, int end)
+void AppendContents(TitleAreaContent* node, QAxObject* doc, int start, int end)
 {
     QAxObject* content_area = doc->querySubObject("Range(int Start, int End)", start, end);
     QAxObject* tables = content_area->querySubObject("Tables");
@@ -365,18 +365,18 @@ void AppendContents(TitleContentNode* node, QAxObject* doc, int start, int end)
     }
 }
 
-TitleContentNode* WordReadOperate::CreateWordNode()
+TitleAreaContent* WordReadOperate::CreateWordNode()
 {
     QAxObject* paragraphs = doc->querySubObject("Paragraphs");
     int paragraph_count = paragraphs->property("Count").toInt();
     QVector<Heading> heading_vector;
-    QStack<TitleContentNode*> node_stack;
+    QStack<TitleAreaContent*> title_stack;
     Heading st;
     st.start = st.end = 0;
     st.level = RootLevel;
-    TitleContentNode* root = new TitleContentNode();
+    TitleAreaContent* root = new TitleAreaContent();
     heading_vector.push_back(st);
-    node_stack.push(root);
+    title_stack.push(root);
     for (int i = 1; i <= paragraph_count; i++) {
         QAxObject* range = paragraphs->querySubObject("Item(int)", i)->querySubObject("Range");
 
@@ -393,34 +393,34 @@ TitleContentNode* WordReadOperate::CreateWordNode()
             st.start = start;
             st.end = end;
             st.level = WordTitleLevel(heading_style_name.indexOf(style_name) + 1);
-            TitleContentNode* top_node = node_stack.top();
+            TitleAreaContent* top_title = title_stack.top();
             int last_end = heading_vector.last().end;
             heading_vector.push_back(st);
-            if (top_node->GetTitleLevel() < st.level)
+            if (top_title->GetTitleLevel() < st.level)
             {
-                AppendContents(top_node, doc, last_end, st.start);
+                AppendContents(top_title, doc, last_end, st.start);
                 QVector<QString> text_list;
                 QVector<TextFormat> format_list;
                 GetTextAreaInfo(range, text_list, format_list);
                 QString title = range->property("Text").toString().remove('\r');
-                TitleAreaContent* title_area = static_cast<TitleAreaContent*>(top_node->AppendTitleAreaContent(title, format_list[0]));
-                node_stack.push(title_area->node);
+                TitleAreaContent* title_area = static_cast<TitleAreaContent*>(top_title->AppendTitleAreaContent(title, format_list[0]));
+                title_stack.push(title_area);
             }
             else
             {
-                AppendContents(top_node, doc, last_end, st.start);
-                while (top_node->GetTitleLevel() > st.level)
+                AppendContents(top_title, doc, last_end, st.start);
+                while (top_title->GetTitleLevel() > st.level)
                 {
-                    node_stack.pop();
-                    top_node = node_stack.top();
+                    title_stack.pop();
+                    top_title = title_stack.top();
                 }
-                //TitleContentNode* node = new TitleContentNode(range->property("Text").toString().remove('\r'), top_node->parent);
+                //TitleAreaContent* node = new TitleAreaContent(range->property("Text").toString().remove('\r'), top_node->parent);
                 QVector<QString> text_list;
                 QVector<TextFormat> format_list;
                 GetTextAreaInfo(range, text_list, format_list);
                 QString title = range->property("Text").toString().remove('\r');
-                TitleAreaContent* title_area = static_cast<TitleAreaContent*>(top_node->GetParent()->AppendTitleAreaContent(title, format_list[0]));
-                node_stack.push_back(title_area->node);
+                TitleAreaContent* title_area = static_cast<TitleAreaContent*>(top_title->GetParent()->AppendTitleAreaContent(title, format_list[0]));
+                title_stack.push_back(title_area);
             }
         }
     }
@@ -448,14 +448,14 @@ WordWriteOperate::~WordWriteOperate()
     delete word;
 }
 
-void WordWriteOperate::WriteToWord(TitleContentNode* root)
+void WordWriteOperate::WriteToWord(TitleAreaContent* root)
 {
     if (root == nullptr) return;
     QAxObject* selection = doc->querySubObject("ActiveWindow")->querySubObject("Selection");
     DoWriteToWord(root, selection);
 }
 
-void WordWriteOperate::DoWriteToWord(TitleContentNode* root, QAxObject* selection)
+void WordWriteOperate::DoWriteToWord(TitleAreaContent* root, QAxObject* selection)
 {
     for (auto it = root->GetContentList().constBegin(); it != root->GetContentList().constEnd(); it++)
     {
@@ -564,11 +564,11 @@ void WordWriteOperate::DoWriteToWord(TitleContentNode* root, QAxObject* selectio
         {
             TitleAreaContent* title_area = dynamic_cast<TitleAreaContent*>(*it);
 
-            SetTextFormat(selection, title_area->node->title_format);
+            SetTextFormat(selection, title_area->title_format);
 
-            selection->dynamicCall("TypeText(const QString&)", (title_area->node->title));
+            selection->dynamicCall("TypeText(const QString&)", (title_area->title));
             selection->dynamicCall("TypeParagraph(void)");//²åÈë»Ø³µ
-            DoWriteToWord(title_area->node, selection);
+            DoWriteToWord(title_area, selection);
         }
     }
 }

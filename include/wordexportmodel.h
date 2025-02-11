@@ -1,7 +1,7 @@
 #pragma once
 #include "qutreemodel.h"
 
-class TitleContentNode;
+class AreaContent;
 
 class ExportTreeModel: public QUTreeModel
 {
@@ -28,6 +28,6 @@ public:
 	bool canDropMimeData(const QMimeData* data, Qt::DropAction action,
 		int row, int column, const QModelIndex& parent) const;
 
-	void insertTreeRows(int insert_row, const QModelIndex& parent, TitleContentNode* root);
+	AreaContent* insertTreeRows(int insert_row, const QModelIndex& parent, AreaContent* area_content);
 };
 

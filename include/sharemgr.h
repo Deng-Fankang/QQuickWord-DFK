@@ -10,11 +10,11 @@ using namespace std;
 
 extern QQuickWord* main_window;
 void ShowMainWindow();
-class TitleContentNode;
+class TitleAreaContent;
 
 struct ImportFileData
 {
-	ImportFileData(QString file_name, TitleContentNode* root) {
+	ImportFileData(QString file_name, TitleAreaContent* root) {
 		this->file_name = file_name;
 		this->root = root;
 	}
@@ -25,7 +25,7 @@ struct ImportFileData
 	}
 
 	QString file_name;
-	TitleContentNode* root;
+	TitleAreaContent* root;
 };
 
 class ImportFilesMgr: public QObject

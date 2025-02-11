@@ -12,7 +12,7 @@ class TextAreaContent;
 class TableAreaContent;
 class ListAreaContent;
 class ImageAreaContent;
-class TitleContentNode;
+class AreaContent;
 
 namespace WordEdit {
 	class WordEditWidget : public BaseFrame
@@ -23,11 +23,11 @@ namespace WordEdit {
 		WordEditWidget(QWidget* parent = nullptr);
 		~WordEditWidget();
 
-		void SetImportEditContent(const TitleContentNode* node);
-		void SetExportEditContent(const TitleContentNode* node);
+		void SetImportEditContent(const AreaContent* area_content);
+		void SetExportEditContent(const AreaContent* area_content);
 
 	private:
-		void SetRecurEditContent(QTextEdit* text_edit, const TitleContentNode* node);
+		void SetRecurEditContent(QTextEdit* text_edit, const AreaContent* area_content);
 		void InsertText(QTextEdit* text_edit, const TextAreaContent* content);
 		void InsertTable(QTextEdit* text_edit, const TableAreaContent* content);
 		void InsertList(QTextEdit* text_edit, const ListAreaContent* content);

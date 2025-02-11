@@ -1,6 +1,7 @@
 #include "worddefine.h"
 #include "qdebug.h"
 
+
 TextAreaContent::TextAreaContent(const QString& text, const TextFormat& f)
 {
     text_data = text;
@@ -67,46 +68,43 @@ void TableAreaContent::PrintContent()
     }
 }
 
-TitleAreaContent::TitleAreaContent(TitleContentNode* node_)
-{
-    node = node_;
-}
+//TitleAreaContent::TitleAreaContent(TitleAreaContent* node_)
+//{
+//    node = node_;
+//}
 
 void TitleAreaContent::PrintContent()
 {
-    qDebug() << node->title << endl;
+    
 }
 
-TitleContentNode::TitleContentNode(const QString& title_)
+TitleAreaContent::TitleAreaContent(const QString& title_, TitleAreaContent* parent_area_)
+    :AreaContent(parent_area_)
 {
-    parent = nullptr;
     level = 0;
     title = title_;
+    title_format = DEFAULT_TITLE_AREA_FORMAT;
 }
 
-TitleContentNode::~TitleContentNode()
+TitleAreaContent::~TitleAreaContent()
 {
-    for (AreaContent* content : content_list)
-    {
-        delete content;
-    }
 }
 
-AreaContent* TitleContentNode::AppendTextAreaContent(QString context, TextFormat f)
+AreaContent* TitleAreaContent::AppendTextAreaContent(QString context, TextFormat f)
 {
     TextAreaContent* content = new TextAreaContent(context, f);
     content_list.push_back(content);
     return content;
 }
 
-AreaContent* TitleContentNode::AppendTableAreaContent(const QVector<QVector<TableAreaContent::CellAreaContent>>& data, const TableFormat& format, QString area_title)
+AreaContent* TitleAreaContent::AppendTableAreaContent(const QVector<QVector<TableAreaContent::CellAreaContent>>& data, const TableFormat& format, QString area_title)
 {
     TableAreaContent* content = new TableAreaContent(data, format, area_title);
     content_list.push_back(content);
     return content;
 }
 
-AreaContent* TitleContentNode::AppendListAreaContent(const QString& text, const ListTemplateFormat& list_template_format, const ListFormat& list_format, const TextFormat& text_format)
+AreaContent* TitleAreaContent::AppendListAreaContent(const QString& text, const ListTemplateFormat& list_template_format, const ListFormat& list_format, const TextFormat& text_format)
 {
     ListAreaContent* content = new ListAreaContent(list_template_format);
     content_list.push_back(content);
@@ -114,7 +112,7 @@ AreaContent* TitleContentNode::AppendListAreaContent(const QString& text, const 
     return content;
 }
 
-void TitleContentNode::AppendListItem(const QString& text, const ListFormat& list_format, const TextFormat& text_format)
+void TitleAreaContent::AppendListItem(const QString& text, const ListFormat& list_format, const TextFormat& text_format)
 {
     if (content_list.size() > 0)
     {
@@ -127,28 +125,27 @@ void TitleContentNode::AppendListItem(const QString& text, const ListFormat& lis
     }
 }
 
-AreaContent* TitleContentNode::AppendImageAreaContent(const QImage& img, ImageFormat f)
+AreaContent* TitleAreaContent::AppendImageAreaContent(const QImage& img, ImageFormat f)
 {
     ImageAreaContent* content = new ImageAreaContent(img, f);
     content_list.push_back(content);
     return content;
 }
 
-AreaContent* TitleContentNode::AppendTitleAreaContent(const QString& title, TextFormat format)
+AreaContent* TitleAreaContent::AppendTitleAreaContent(const QString& title, TextFormat format)
 {
-    TitleContentNode* child_node = new TitleContentNode(title);
-    child_node->title_format = format;
-    child_node->parent = this;
-    child_node->level = level + 1;
-    child_node->index_from_root = index_from_root;
-    child_node->index_from_root.push_back(child_title_list.size());
-    child_title_list.push_back(child_node);
-    TitleAreaContent* content = new TitleAreaContent(child_node);
-    content_list.push_back(content);
-    return content;
+    TitleAreaContent* child_title_area = new TitleAreaContent(title);
+    child_title_area->title_format = format;
+    child_title_area->parent_area = this;
+    child_title_area->level = level + 1;
+    child_title_area->index_from_root = index_from_root;
+    child_title_area->index_from_root.push_back(child_title_list.size());
+    child_title_list.push_back(child_title_area);
+    content_list.push_back(child_title_area);
+    return child_title_area;
 }
 
-void TitleContentNode::InsertAreaContent(AreaContent* content, int insert_idx)
+void TitleAreaContent::InsertAreaContent(AreaContent* content, int insert_idx)
 {
     if (insert_idx == -1 || insert_idx >= content_list.size())
     {
@@ -170,60 +167,81 @@ void TitleContentNode::InsertAreaContent(AreaContent* content, int insert_idx)
     
     if (content->GetAreaType() == TITLE_AREA)
     {
-        TitleAreaContent* title_content = static_cast<TitleAreaContent*>(content);
-        title_content->node->parent = this;
-        title_content->node->level = level + 1;
-        title_content->node->index_from_root = index_from_root;
-        title_content->node->index_from_root.push_back(child_title_list.size());
-        child_title_list.push_back(title_content->node);
+        TitleAreaContent* title_content = dynamic_cast<TitleAreaContent*>(content);
+        title_content->parent_area = this;
+        title_content->level = level + 1;
+        title_content->index_from_root = index_from_root;
+        title_content->index_from_root.push_back(child_title_list.size());
+        child_title_list.push_back(title_content);
     }
 }
 
-TitleContentNode* TitleContentNode::GetParentNode(int level)
+TitleAreaContent* TitleAreaContent::GetParentAreaLevel(int level)
 {
     if (level >= this->level) {
         return nullptr;
     }
-    TitleContentNode* parent_node = parent;
-    while (parent_node)
+    TitleAreaContent* parent_res = parent_area;
+    while (parent_res)
     {
-        if (parent_node->level == level) {
-            return parent_node;
+        if (parent_res->level == level) {
+            return parent_res;
         }
-        parent_node = parent_node->parent;
+        parent_res = parent_res->parent_area;
     }
     return nullptr;
 }
 
-TitleContentNode* TitleContentNode::GetChildNode(int index)
+TitleAreaContent* TitleAreaContent::GetChildNode(int index)
 {
     return child_title_list.at(index);
 }
 
-AreaContent* TitleContentNode::removeChildTitle(TitleContentNode* node)
+//AreaContent* TitleAreaContent::removeChildTitle(TitleAreaContent* node)
+//{
+//    child_title_list.removeOne(node);
+//    auto it = content_list.begin();
+//    for (; it != content_list.end(); it++)
+//    {
+//        if ((*it)->GetAreaType() == TITLE_AREA && (*it) == node)
+//        {
+//            break;
+//        }
+//    }
+//    if (it != content_list.end())
+//    {
+//        AreaContent* ret = *it;
+//        content_list.erase(it);
+//        return ret;
+//    }
+//    
+//    return nullptr;
+//}
+
+bool TitleAreaContent::removeAreaContent(AreaContent* content)
 {
-    child_title_list.removeOne(node);
     auto it = content_list.begin();
     for (; it != content_list.end(); it++)
     {
-        if ((*it)->GetAreaType() == TITLE_AREA && ((TitleAreaContent*)(*it))->node == node)
+        if ((*it) == content)
         {
             break;
         }
     }
     if (it != content_list.end())
     {
-        AreaContent* ret = *it;
-        content_list.erase(it);
-        return ret;
+        AreaContent* t = content_list.takeAt(it - content_list.begin());
+        return true;
     }
-    
-    return nullptr;
+    else
+    {
+        return false;
+    }
 }
 
-int TitleContentNode::GetIndex()
+int TitleAreaContent::GetIndex()
 {
-    return parent->child_title_list.indexOf(this);
+    return parent_area->child_title_list.indexOf(this);
 }
 
 ListAreaContent::ListAreaContent(const ListAreaContent& cp)

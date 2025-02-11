@@ -1,62 +1,83 @@
 #pragma once
 #include <memory>
 #include "qmap.h"
+#include "worddefine.h"
 #include "qvariant.h"
 
 using namespace std;
 
-class TitleContentNode;
 class TreeItem;
 
 class ITreeItemData
 {
 public:
-	enum class ItemDataType
-	{
-		Unknown_Data = 0,
-		Title_Data,
-	};
+	ITreeItemData(TreeItem* owner_, AreaContent* area_);
 
-	ITreeItemData(TreeItem* owner_) { owner = owner_; data_type = ItemDataType::Unknown_Data; }
+	AreaContent* GetAreaContent() { return ptr_area; }
 
-	virtual ~ITreeItemData() {};
-	virtual void SetParent(TreeItem* parent_, int index = -1) = 0;
+	virtual ~ITreeItemData();
+	void SetParent(TreeItem* dst_parent_, int index = -1);
 
-	enum class ItemDataType data_type;
+protected:
 	TreeItem* owner;
+	AreaContent* ptr_area;
 };
 
 class TitleItemData: public ITreeItemData
 {
 public:
-	TitleItemData(TreeItem* owner_, TitleContentNode* node);
-	void SetParent(TreeItem* dst_parent_, int index = -1) override;
+	TitleItemData(TreeItem* owner_, TitleAreaContent* area);
 	void RemoveChild(TreeItem* child_);
+};
 
-	void SetTitleContentNode(TitleContentNode* node);
-	TitleContentNode* GetTitleContentNode();
-	~TitleItemData();
 
-private:
-	TitleContentNode* ptr_node;
+class TextItemData : public ITreeItemData
+{
+public:
+	TextItemData(TreeItem* owner_, TextAreaContent* area);
+};
+
+class TableItemData : public ITreeItemData
+{
+public:
+	TableItemData(TreeItem* owner_, TableAreaContent* area);
+};
+
+
+class ImageItemData : public ITreeItemData
+{
+public:
+	ImageItemData(TreeItem* owner_, ImageAreaContent* area);
+};
+
+class ListItemData : public ITreeItemData
+{
+public:
+	ListItemData(TreeItem* owner_, ListAreaContent* area);
 };
 
 
 class TreeItem
 {
+	friend class QUTreeModel;
+	friend class ITreeItemData;
 public:
 	TreeItem(TreeItem* parent_ = nullptr, int index = -1);
 
-	void SetParent(TreeItem* parent_, int index = -1);
+	void SetParent(TreeItem* parent_, int index = -1, bool set_item_data=true);
 	
 	void RemoveChildren(int start, int count);
+
+	const QVector<TreeItem*>& getChildren() { return children; };
 
 	~TreeItem();
 
 	int row();
-
-	ITreeItemData* item_data;
 	QMap<int, QVariant> user_data;
+	ITreeItemData* item_data;
+
+private:
+	
 	QVector<TreeItem*> children;
 	TreeItem* parent;
 };

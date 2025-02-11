@@ -32,21 +32,21 @@ namespace WordEdit {
 		cout << "wordedit stop" << endl;
 	}
 
-	void Module::SetImportEditContent(const TitleContentNode* node)
+	void Module::SetImportEditContent(const AreaContent* area_content)
 	{
-		if (node == nullptr)
+		if (area_content == nullptr)
 		{
 			return;
 		}
-		((WordEditWidget*)w)->SetImportEditContent(node);
+		((WordEditWidget*)w)->SetImportEditContent(area_content);
 	}
 
-	void Module::SetExportEditContent(const TitleContentNode* node)
+	void Module::SetExportEditContent(const AreaContent* area_content)
 	{
-		if (node == nullptr)
+		if (area_content == nullptr)
 		{
 			return;
 		}
-		((WordEditWidget*)w)->SetExportEditContent(node);
+		((WordEditWidget*)w)->SetExportEditContent(area_content);
 	}
 }

@@ -1,8 +1,9 @@
 #pragma once
-#include "qstyleditemdelegate.h"
+#include "quitemdelegate.h"
 
-class ExportTitleDelegate : public QStyledItemDelegate
+class ExportTitleDelegate : public TreeTitleItemDelegate
 {
+public:
     void paint(QPainter* painter,
         const QStyleOptionViewItem& option, const QModelIndex& index) const override;
     QSize sizeHint(const QStyleOptionViewItem& option,

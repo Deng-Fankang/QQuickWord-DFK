@@ -41,13 +41,13 @@ namespace WordImport {
 		file_list_view->setItemDelegate(file_delegate);
 		connect(file_list_view->selectionModel(), &QItemSelectionModel::currentChanged, this, &WordImportWidget::OnSelectFile);
 
-		TitleItemDelegate* title_delegate = new TitleItemDelegate();
+		ImportTitleDelegate* title_delegate = new ImportTitleDelegate();
 		title_tree_view = new QTreeView(this);
 		title_tree_view->setDragEnabled(true);
 		title_tree_view->setModel(tree_model);
 		title_tree_view->setItemDelegate(title_delegate);
 		title_tree_view->setHeaderHidden(true);
-		connect(title_tree_view->selectionModel(), &QItemSelectionModel::currentChanged, this, &WordImportWidget::OnSelectTitle);
+		connect(title_tree_view->selectionModel(), &QItemSelectionModel::currentChanged, this, &WordImportWidget::OnSelectItem);
 
 		QFile tree_qss_file("config/qss/titletree.qss");
 		tree_qss_file.open(QIODevice::ReadOnly);
@@ -72,16 +72,11 @@ namespace WordImport {
 		tree_model->updateData(Module::InstancePtr()->GetCurFileTitleTree());
 	}
 
-	void WordImportWidget::OnSelectTitle(const QModelIndex& current, const QModelIndex& previous)
+	void WordImportWidget::OnSelectItem(const QModelIndex& current, const QModelIndex& previous)
 	{
 		TreeItem* tree_item = tree_model->TreeItemPtr(current);
-		if (tree_item->item_data->data_type == ITreeItemData::ItemDataType::Title_Data)
-		{
-			TitleContentNode* node = dynamic_cast<TitleItemData*>(tree_item->item_data)->GetTitleContentNode();
-			WordEdit::Module::InstancePtr()->SetImportEditContent(node);
-			qDebug() << node->title << endl;
-		}
-		//TitleContentNode* node = (TitleContentNode*)current.data(Qt::TitleContentRole).value<void*>();
+		AreaContent* area_content = tree_item->item_data->GetAreaContent();
+		WordEdit::Module::InstancePtr()->SetImportEditContent(area_content);
 	}
 
 
@@ -92,7 +87,7 @@ namespace WordImport {
 		int i = 0;
 		for (const ImportFileData& f : files_data) {
 			Module::InstancePtr()->file_list_buffer.append({ {Qt::DisplayRole, f.file_name} });
-			TreeItem* root = GetTitleTreeFromNode(files_data[i].root);
+			TreeItem* root = GetTitleTreeFromAreaContent(files_data[i].root);
 			Module::InstancePtr()->title_tree_buffer.append(root);
 			i++;
 		}

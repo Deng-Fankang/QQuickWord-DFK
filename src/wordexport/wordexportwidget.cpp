@@ -41,14 +41,17 @@ namespace WordExport {
 	{
 		ui.setupUi(this);
 		root = new TreeItem();
+		root->item_data = new TitleItemData(root, new TitleAreaContent());
 		root_edit_able = new TreeItem();
-		TitleContentNode* root_title_node = new TitleContentNode(QString::fromLocal8Bit("根节点"));
+		TitleAreaContent* root_title_node = new TitleAreaContent(QString::fromLocal8Bit("根节点"));
 		root_edit_able->user_data[Qt::DisplayRole] = root_title_node->title;
 		root_edit_able->user_data[Qt::EditRole] = root_title_node->title;
 		//root_edit_able->user_data[Qt::UserRole] = TITLE_CONTENT;
 		//root_edit_able->user_data[Qt::TitleContentRole] = QVariant::fromValue((void*)root_title_node);
 		root_edit_able->item_data = new TitleItemData(root_edit_able, root_title_node);
-		root->children.push_back(root_edit_able);
+
+		root_edit_able->SetParent(root);
+		//root->children.push_back(root_edit_able);
 		//TestConstructTree(root_edit_able);
 		SetWidget();
 		setFrameStyle(QFrame::WinPanel);
@@ -77,13 +80,13 @@ namespace WordExport {
 		title_tree_view->setModel(title_tree_model);
 		title_tree_view->setItemDelegate(new ExportTitleDelegate());
 
-		connect(title_tree_view->selectionModel(), &QItemSelectionModel::currentChanged, this, &WordExportWidget::OnSelectTitle);
+		connect(title_tree_view->selectionModel(), &QItemSelectionModel::currentChanged, this, &WordExportWidget::OnSelectItem);
 		ui.verticalLayout->addWidget(title_tree_view);
 	}
 
 	void WordExportWidget::PrintTree(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
 	{
-		for (TreeItem* child : root_edit_able->children) {
+		for (TreeItem* child : root_edit_able->getChildren()) {
 			qDebug() << child->user_data[Qt::DisplayRole].toString() << endl;
 		}
 		qDebug() << "index:" << topLeft.data().toString() << endl;
@@ -94,19 +97,11 @@ namespace WordExport {
 		qDebug() << "id:" << item << "," << item->user_data[Qt::DisplayRole] << endl;
 	}
 
-	void WordExportWidget::OnSelectTitle(const QModelIndex& current, const QModelIndex& previous)
+	void WordExportWidget::OnSelectItem(const QModelIndex& current, const QModelIndex& previous)
 	{
 		ITreeItemData* item_data_ptr = GetTreeItemDataPtr(current);
-		if (item_data_ptr->data_type == ITreeItemData::ItemDataType::Title_Data)
-		{
-			TitleContentNode* node = dynamic_cast<TitleItemData*>(item_data_ptr)->GetTitleContentNode();
-			if (node == nullptr)
-			{
-				return;
-			}
-			WordEdit::Module::InstancePtr()->SetExportEditContent(node);
-			qDebug() << node->title << endl;
-		}
-		
+		//TitleAreaContent* node = dynamic_cast<TitleAreaContent*>(item_data_ptr->GetAreaContent());
+		WordEdit::Module::InstancePtr()->SetExportEditContent(item_data_ptr->GetAreaContent());
+		//qDebug() << node->title << endl;		
 	}
 }

@@ -1,7 +1,6 @@
 #include "importwidgetdelegate.h"
 #include "qboxlayout.h"
 #include "qradiobutton.h"
-#include "qpainter.h"
 #include "qstyle.h"
 #include "qfontmetrics.h"
 #include "qdebug.h"
@@ -78,12 +77,27 @@ QSize FileItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QMode
     return size;
 }
 
-void TitleItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void ImportTitleDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    QStyledItemDelegate::paint(painter, option, index);
+    TreeTitleItemDelegate::paint(painter, option, index);
 }
 
-QSize TitleItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QSize ImportTitleDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    return QStyledItemDelegate::sizeHint(option, index);
+    return TreeTitleItemDelegate::sizeHint(option, index);
+}
+
+QWidget* ImportTitleDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    return TreeTitleItemDelegate::createEditor(parent, option, index);
+}
+
+void ImportTitleDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
+{
+    TreeTitleItemDelegate::setEditorData(editor, index);
+}
+
+void ImportTitleDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
+{
+    TreeTitleItemDelegate::setModelData(editor, model, index);
 }

@@ -10,7 +10,7 @@ class WordReadOperate
 public:
 	WordReadOperate(const QString& file_name);
     ~WordReadOperate();
-    TitleContentNode* CreateWordNode();
+    TitleAreaContent* CreateWordNode();
 
 private:
     
@@ -29,10 +29,10 @@ public:
     WordWriteOperate(const QString& file_name);
     ~WordWriteOperate();
 
-    void WriteToWord(TitleContentNode* root);
+    void WriteToWord(TitleAreaContent* root);
 
 private:
-    void DoWriteToWord(TitleContentNode* root, QAxObject* selection);
+    void DoWriteToWord(TitleAreaContent* root, QAxObject* selection);
 
 private:
     QString save_name;

@@ -55,46 +55,50 @@ namespace WordEdit {
 		qDebug() << "WordEditWidget destroy" << endl;
 	}
 
-	void WordEditWidget::SetImportEditContent(const TitleContentNode* node)
+	void WordEditWidget::SetImportEditContent(const AreaContent* area_content)
 	{
 		import_text_edit->clear();
 		import_text_edit->setMinimumWidth(300);
-		SetRecurEditContent(import_text_edit, node);
+		SetRecurEditContent(import_text_edit, area_content);
 	}
 
-	void WordEditWidget::SetExportEditContent(const TitleContentNode* node)
+	void WordEditWidget::SetExportEditContent(const AreaContent* area_content)
 	{
 		export_text_edit->clear();
 		export_text_edit->setMinimumWidth(300);
-		SetRecurEditContent(export_text_edit, node);
+		SetRecurEditContent(export_text_edit, area_content);
 	}
 
-
-	void WordEditWidget::SetRecurEditContent(QTextEdit* text_edit, const TitleContentNode* node)
+	void WordEditWidget::SetRecurEditContent(QTextEdit* text_edit, const AreaContent* area_content)
 	{
-		for (AreaContent* content : node->GetContentList()) {
-			if (content->GetAreaType() == TEXT) {
-				InsertText(text_edit, (TextAreaContent*)content);
-			}
-			else if (content->GetAreaType() == TABLE) {
-				InsertTable(text_edit, (TableAreaContent*)content);
-			}
-			else if(content->GetAreaType() == LIST)
+		if (area_content->GetAreaType() == TEXT) 
+		{
+			InsertText(text_edit, dynamic_cast<const TextAreaContent*>(area_content));
+		}
+		else if (area_content->GetAreaType() == TABLE) 
+		{
+			InsertTable(text_edit, dynamic_cast<const TableAreaContent*>(area_content));
+		}
+		else if (area_content->GetAreaType() == LIST)
+		{
+			InsertList(text_edit, dynamic_cast<const ListAreaContent*>(area_content));
+		}
+		else if (area_content->GetAreaType() == IMAGE) 
+		{
+			InsertImage(text_edit, dynamic_cast<const ImageAreaContent*>(area_content));
+		}
+		else
+		{
+			const TitleAreaContent* title_content = dynamic_cast<const TitleAreaContent*>(area_content);
+			QTextBlockFormat block_format;
+			QTextCharFormat char_format;
+			SetTextFormat(title_content->title_format, block_format, char_format);
+			QTextCursor cursor(text_edit->textCursor());
+			cursor.insertBlock(block_format, char_format);
+			cursor.insertText(title_content->title);
+			for (const AreaContent* content : title_content->GetContentList())
 			{
-				InsertList(text_edit, (ListAreaContent*)content);
-			}
-			else if (content->GetAreaType() == IMAGE) {
-				InsertImage(text_edit, (ImageAreaContent*)content);
-			}
-			else {
-				TitleAreaContent* title_content = static_cast<TitleAreaContent*>(content);
-				QTextBlockFormat block_format;
-				QTextCharFormat char_format;
-				SetTextFormat(title_content->node->title_format, block_format, char_format);
-				QTextCursor cursor(text_edit->textCursor());
-				cursor.insertBlock(block_format, char_format);
-				cursor.insertText(title_content->node->title);
-				SetRecurEditContent(text_edit, title_content->node);
+				SetRecurEditContent(text_edit, content);
 			}
 		}
 	}

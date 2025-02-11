@@ -63,20 +63,15 @@ void QQuickWord::ImportFiles()
 }
 
 
-void Test(TitleContentNode* root) {
+void Test(TitleAreaContent* root) {
     if (root) {
         for (AreaContent* area : root->GetContentList()) {
             area->PrintContent();
             if (area->GetAreaType() == TITLE_AREA) {
-                Test(dynamic_cast<TitleAreaContent*>(area)->node);
+                Test(dynamic_cast<TitleAreaContent*>(area));
             }
         }
     }
-    //qDebug() << root->children[0]->content_list[0]->GetAreaType() << endl;
-    //qDebug() << root->children[0]->children[0]->content_list[0]->GetAreaType() << endl;
-    //const QVector<AreaContent*>& content = root->children[0]->children[0]->children[0]->content_list;
-    //qDebug() << content[0]->GetAreaType() << ',' << content[1]->GetAreaType() << ',' << content[2]->GetAreaType()\
-    //    << ',' << content[3]->GetAreaType() << endl;
 }
 
 void QQuickWord::ExportFiles()

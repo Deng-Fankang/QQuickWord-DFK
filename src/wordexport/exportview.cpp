@@ -49,7 +49,7 @@ void ExportTitleView::ShowMenuPop(const QPoint& pos)
 	if (!operate_index.isValid()) return;
 
 	QMenu* menu = new QMenu(this);
-	if (operate_index.parent() == QModelIndex()) {
+	if (operate_index.parent().parent() == QModelIndex()) {
 		QAction* append_child_node = new QAction(QString::fromLocal8Bit("&添加子节点"), this);
 		connect(append_child_node, &QAction::triggered, this, &ExportTitleView::SlotAppendChildItem);
 		menu->addAction(append_child_node);
@@ -84,14 +84,9 @@ void ExportTitleView::SlotAppendItem(bool checked)
 		int row = operate_index.row();
 		model()->insertRow(row, operate_index.parent());
 
-		TitleContentNode* child_item_node = new TitleContentNode(QString::fromLocal8Bit("新标题"));
-		model()->setData(operate_index.sibling(row, 0), QVariant::fromValue<void*>(child_item_node), Qt::TitleContentRole);
+		TitleAreaContent* child_title = new TitleAreaContent(QString::fromLocal8Bit("新标题"));
+		model()->setData(operate_index.parent().child(row, 0), QVariant::fromValue<void*>(child_title), Qt::TitleContentRole);
 
-		TreeItem* parent_item = EXPORT_MODEL_PTR->TreeItemPtr(operate_index.parent());
-
-		TitleContentNode* parent_item_node = dynamic_cast<TitleItemData*>(parent_item->item_data)->GetTitleContentNode();
-		TitleAreaContent* content = new TitleAreaContent(child_item_node);
-		parent_item_node->InsertAreaContent(content, row);
 	}
 }
 
@@ -101,14 +96,9 @@ void ExportTitleView::SlotAppendChildItem(bool checked)
 		int count = model()->rowCount(operate_index);
 		model()->insertRow(count, operate_index);
 
-		TitleContentNode* child_item_node = new TitleContentNode(QString::fromLocal8Bit("新标题"));
-		model()->setData(operate_index.child(count, 0), QVariant::fromValue<void*>(child_item_node), Qt::TitleContentRole);
+		TitleAreaContent* child_title = new TitleAreaContent(QString::fromLocal8Bit("新标题"));
+		model()->setData(operate_index.child(count, 0), QVariant::fromValue<void*>(child_title), Qt::TitleContentRole);
 
-		TreeItem* parent_item = EXPORT_MODEL_PTR->TreeItemPtr(operate_index);
-
-		TitleContentNode* parent_item_node = dynamic_cast<TitleItemData*>(parent_item->item_data)->GetTitleContentNode();
-		TitleAreaContent* content = new TitleAreaContent(child_item_node);
-		parent_item_node->InsertAreaContent(content);
 	}
 }
 

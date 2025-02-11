@@ -2,7 +2,8 @@
 #include "basemodule.h"
 #include "singleton.h"
 
-class TitleContentNode;
+class TitleAreaContent;
+class AreaContent;
 
 namespace WordEdit {
 	class Module: public BaseModule, public Singleton<Module>
@@ -14,8 +15,8 @@ namespace WordEdit {
 		void Start();
 		void Stop();
 
-		void SetImportEditContent(const TitleContentNode* node);
-		void SetExportEditContent(const TitleContentNode* node);
+		void SetImportEditContent(const AreaContent* area_content);
+		void SetExportEditContent(const AreaContent* area_content);
 
 	public:
 

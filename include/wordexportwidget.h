@@ -19,7 +19,7 @@ namespace WordExport {
 		void SetWidget();
 		void PrintTree(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles);
 		void OnSelectTest(const QModelIndex& current, const QModelIndex& previous);
-		void OnSelectTitle(const QModelIndex& current, const QModelIndex& previous);
+		void OnSelectItem(const QModelIndex& current, const QModelIndex& previous);
 
 	private:
 		TreeItem* root;
