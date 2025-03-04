@@ -4,6 +4,7 @@
 #include "sharemgr.h"
 #include "qdebug.h"
 #include "wordoperate.h"
+#include "wordtemplate.h"
 #include <iostream>
 
 
@@ -21,6 +22,7 @@ QQuickWord::QQuickWord(QWidget *parent)
     connect(ui.actionimport, &QAction::triggered, this, &QQuickWord::ImportFiles);
     connect(ui.actionexport, &QAction::triggered, this, &QQuickWord::ExportFiles);
     connect(ui.actionclear, &QAction::triggered, this, &QQuickWord::ClearFiles);
+    connect(ui.actionmatch, &QAction::triggered, this, &QQuickWord::MatchFiles);
 }
 
 QQuickWord::~QQuickWord()
@@ -56,7 +58,8 @@ void QQuickWord::ImportFiles()
     /*SetVisible(WORD_IMPORT_WIDGET, true);
     SetVisible(WORD_EDIT_WIDGET, true);*/
     QVector<QString> files = { 
-        "D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test.docx",
+        "D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\import.docx",
+        //"D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test.docx",
         //"D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test1.docx",
     };
     ImportFilesMgr::Instance().ImportFiles(files);
@@ -76,11 +79,23 @@ void Test(TitleAreaContent* root) {
 
 void QQuickWord::ExportFiles()
 {
-    WordWriteOperate wwrite("D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test_write.docx");
+    WordWriteOperate wwrite("D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test_write_2.docx");
     const vector<ImportFileData>& files_data = ImportFilesMgr::Instance().GetFilesData();
     wwrite.WriteToWord(files_data[0].root);
 }
 
 void QQuickWord::ClearFiles()
 {
+}
+
+void QQuickWord::MatchFiles()
+{
+    
+    const vector<ImportFileData> & files_data = ImportFilesMgr::Instance().GetFilesData();
+    if (files_data.size() > 0)
+    {
+        WordTemplate* word_template = WordTemplateMgr::Instance().GetWordTemplate("RJYZRWS");
+        bool ret = word_template->TryMatchAreaContent(files_data[0].root);
+    }
+
 }

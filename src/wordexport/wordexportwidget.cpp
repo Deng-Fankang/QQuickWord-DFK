@@ -8,7 +8,7 @@
 
 namespace WordExport {
 	void TestConstructTree(TreeItem* root) {
-		TreeItem* child_1 = new TreeItem(root);
+		/*TreeItem* child_1 = new TreeItem(root);
 		TreeItem* child_2 = new TreeItem(root);
 		child_1->user_data[Qt::EditRole] = QString::fromLocal8Bit("子节点1");
 		child_2->user_data[Qt::EditRole] = QString::fromLocal8Bit("子节点2");
@@ -32,7 +32,7 @@ namespace WordExport {
 		child_2_1->user_data[Qt::DisplayRole] = QString::fromLocal8Bit("子节点21");
 		child_2_2->user_data[Qt::DisplayRole] = QString::fromLocal8Bit("子节点22");
 		child_2_1->user_data[Qt::UserRole] = CONTENT;
-		child_2_2->user_data[Qt::UserRole] = TITLE_CONTENT;
+		child_2_2->user_data[Qt::UserRole] = TITLE_CONTENT;*/
 	}
 
 

@@ -5,6 +5,11 @@
 #include "qdebug.h"
 #include "qlinkedlist.h"
 
+class TextFormat;
+extern const QVector<QString> HEADING_STYLE_NAME;
+extern const TextFormat DEFAULT_TEXT_AREA_FORMAT;
+extern const TextFormat DEFAULT_TITLE_AREA_FORMAT;
+
 enum AreaType
 {
 	TEXT,
@@ -23,12 +28,6 @@ enum WordTitleLevel
 	ThreeLevel = 3,
 };
 
-enum ExportItemType
-{
-	TITLE_CONTENT,
-	CONTENT,
-};
-
 enum WdListType {
 	wdListNoNumbering,
 	wdListListNumOnly,
@@ -37,6 +36,27 @@ enum WdListType {
 	wdListOutlineNumbering,
 	wdListMixedNumbering,
 	wdListPictureBullet,
+};
+
+
+enum WdListGalleryType
+{
+	wdBulletGallery=1,
+	wdNumberGallery,
+	wdOutlineNumberGallery,
+};
+
+
+enum WdBorderType
+{
+	wdBorderDiagonalUp=-8,//从左下角开始的对角线边框。
+	wdBorderDiagonalDown=-7,//从左上角开始的对角线边框。
+	wdBorderVertical=-6,//纵向框线。
+	wdBorderHorizontal=-5,//横向框线。
+	wdBorderRight=-4,//右侧框线。
+	wdBorderBottom=-3,//底边框线。
+	wdBorderLeft=-2,//左侧框线。
+	wdBorderTop=-1,//上框线。
 };
 
 namespace Qt
@@ -51,16 +71,44 @@ namespace Qt
 	};
 };
 
-struct TextFormat {
+
+struct Font
+{
 	int font_bold;
 	int font_italic;
 	float font_size;
 	float font_spacing;
 	float font_number_spacing;
+	int font_color;
+	QString font_name;
+	QString font_name_fareast;
+	QString font_name_ascii;
 
+	Font& operator=(const Font& cp)
+	{
+		if (this == &cp)
+		{
+			return *this;
+		}
+		font_bold = cp.font_bold;
+		font_italic = cp.font_italic;
+		font_size = cp.font_size;
+		font_spacing = cp.font_spacing;
+		font_number_spacing = cp.font_number_spacing;
+		font_color = cp.font_color;
+		font_name = cp.font_name;
+		font_name_fareast = cp.font_name_fareast;
+		font_name_ascii = cp.font_name_ascii;
+		return *this;
+	}
+};
+
+
+struct ParaFormat
+{
 	float line_spacing;
 	int line_spacing_rule;
-	
+
 	float line_unit_after;
 	float line_unit_before;
 
@@ -74,22 +122,13 @@ struct TextFormat {
 	float spacing_after_auto;
 	float spacing_before_auto;
 	int alignment;
-	QString font_name;
-	QString font_name_fareast;
-	QString font_name_ascii;
-	QString style_name;
 
-	TextFormat& operator=(const TextFormat& cp)
+	ParaFormat& operator=(const ParaFormat& cp)
 	{
 		if (this == &cp)
 		{
 			return *this;
 		}
-		font_bold = cp.font_bold;
-		font_italic = cp.font_italic;
-		font_size = cp.font_size;
-		font_spacing = cp.font_spacing;
-		font_number_spacing = cp.font_number_spacing;
 		line_spacing = cp.line_spacing;
 		line_spacing_rule = cp.line_spacing_rule;
 		line_unit_after = cp.line_unit_after;
@@ -102,9 +141,23 @@ struct TextFormat {
 		spacing_after_auto = cp.spacing_after_auto;
 		spacing_before_auto = cp.spacing_before_auto;
 		alignment = cp.alignment;
-		font_name = cp.font_name;
-		font_name_fareast = cp.font_name_fareast;
-		font_name_ascii = cp.font_name_ascii;
+		return *this;
+	}
+};
+
+struct TextFormat {
+	Font font;
+	ParaFormat para_format;
+	QString style_name;
+	
+	TextFormat& operator=(const TextFormat& cp)
+	{
+		if (this == &cp)
+		{
+			return *this;
+		}
+		font = cp.font;
+		para_format = cp.para_format;
 		style_name = cp.style_name;
 		return *this;
 	}
@@ -114,8 +167,7 @@ struct ListFormat {
 	int list_value;
 	int list_level_number;
 	QString list_string;
-	QString list_style_name;
-
+	WdListType list_type;
 
 	ListFormat& operator=(const ListFormat& cp)
 	{
@@ -126,7 +178,7 @@ struct ListFormat {
 		list_value = cp.list_value;
 		list_level_number = cp.list_level_number;
 		list_string = cp.list_string;
-		list_style_name = cp.list_style_name;
+		list_type = cp.list_type;
 		return *this;
 	}
 };
@@ -134,13 +186,21 @@ struct ListFormat {
 struct ListTemplateFormat
 {
 	QString template_name;
-	int list_type;
+	WdListType list_type;
+	bool outline_numberd;
 	struct
 	{
+		Font text_font;
+		QString linked_style;
 		QString number_format;
 		float number_pos;
 		int number_style;
 		float text_pos;
+		int index;
+		int reset_on_higher;
+		int start_at;
+		float tab_pos;
+		int trailing_character;
 	}list_levels[9];
 
 	ListTemplateFormat& operator=(const ListTemplateFormat& cp)
@@ -151,17 +211,49 @@ struct ListTemplateFormat
 		}
 		template_name = cp.template_name;
 		list_type = cp.list_type;
+		outline_numberd = cp.outline_numberd;
 		for (int i = 0; i < 9; i++)
 		{
+			list_levels[i].text_font = cp.list_levels[i].text_font;
+			list_levels[i].linked_style = cp.list_levels[i].linked_style;
 			list_levels[i].number_format = cp.list_levels[i].number_format;
 			list_levels[i].number_pos = cp.list_levels[i].number_pos;
 			list_levels[i].number_style = cp.list_levels[i].number_style;
 			list_levels[i].text_pos = cp.list_levels[i].text_pos;
+
+			list_levels[i].index = cp.list_levels[i].index;
+			list_levels[i].reset_on_higher = cp.list_levels[i].reset_on_higher;
+			list_levels[i].start_at = cp.list_levels[i].start_at;
+			list_levels[i].tab_pos = cp.list_levels[i].tab_pos;
 		}
 		return*this;
 	}
 };
 
+
+struct BordersFormat
+{
+	int distance_from;
+	int distance_from_bottom;
+	int distance_from_left;
+	int distance_from_right;
+	int distance_from_top;
+	bool enable;
+	int inside_line_style;
+	int inside_line_width;
+	bool join_borders;
+	int outside_line_style;
+	int outside_line_width;
+	struct
+	{
+		int art_style;
+		int art_width;
+		int color;
+		int line_style;
+		int line_width;
+		bool visible;
+	}border_format[8];
+};
 
 struct TableFormat
 {
@@ -181,6 +273,7 @@ struct TableFormat
 
 	float left_indent;
 	int alignment;
+	BordersFormat borders_format;
 	QString style_name;
 	
 	TableFormat& operator=(const TableFormat& cp)
@@ -205,6 +298,7 @@ struct TableFormat
 		left_indent = cp.left_indent;
 		alignment = cp.alignment;
 		style_name = cp.style_name;
+		memcpy(&borders_format, &cp.borders_format, sizeof(borders_format));
 		return *this;
 	}
 };
@@ -236,18 +330,9 @@ struct ImageFormat {
 	}
 };
 
-const static TextFormat DEFAULT_TEXT_AREA_FORMAT = {
-	0, 0, 10.5, 0, 0,
-	12, 0, 0, 0, 0,
-	0, 0, 0, 0, 0,
-	0, 3, "等线", "+中文正文", "+西文正文", "正文",
-};
-
-const static TextFormat DEFAULT_TITLE_AREA_FORMAT = {
-	1, 0, 16, 0, 0,
-	21, 5, 0, 0, 0,
-	0, 0, 13, 13, 0,
-	0, 3, "等线", "+中文正文", "+西文正文", "标题 3",
+struct StyleFormat
+{
+	Font font;
 };
 
 class TitleAreaContent;
@@ -310,6 +395,7 @@ public:
 
 		bool word_wrap;
 		bool fit_text;
+		BordersFormat borders_format;
 	};
 
 	struct CellAreaContent
@@ -350,14 +436,7 @@ public:
 
 	ListAreaContent(const ListAreaContent& cp);
 
-	void AppendListItem(const QString& text, const ListFormat& list_format, const TextFormat& text_format)
-	{
-		ListContent list_content;
-		list_content.text_content.text_data = text;
-		list_content.text_content.text_format = text_format;
-		list_content.list_format = list_format;
-		list_data.push_back(list_content);
-	}
+	void AppendListItem(const QString& text, const ListFormat& list_format, const TextFormat& text_format);
 
 	AreaType GetAreaType() const {
 		return LIST;
@@ -397,23 +476,6 @@ public:
 	ImageFormat image_format;
 };
 
-
-//class TitleAreaContent :public AreaContent
-//{
-//
-//public:
-//	TitleAreaContent(TitleAreaContent* node_);
-//	~TitleAreaContent() { if (node) delete node; };
-//
-//	AreaType GetAreaType() override {
-//		return TITLE_AREA;
-//	}
-//
-//	void PrintContent() override;
-//public:
-//	TitleAreaContent* node;
-//};
-
 class TitleAreaContent :public AreaContent
 {
 public:
@@ -446,11 +508,11 @@ public:
 
 	const QList<TitleAreaContent*>& GetChildTitleList() const { return child_title_list; }
 	const QList<AreaContent*>& GetContentList() const{ return content_list; }
+	const AreaContent* GetChildContent(int idx) const;
 	const QVector<int>& GetIndexFromRoot() const { return index_from_root; }
 
 	int GetTitleLevel() { return level; }
 
-	//AreaContent* removeChildTitle(TitleAreaContent* node);
 	bool removeAreaContent(AreaContent* content);
 
 	int GetIndex();
@@ -465,4 +527,6 @@ private:
 public:
 	QString title;
 	TextFormat title_format;
+	ListTemplateFormat list_template_format;
+	ListFormat list_format;
 };

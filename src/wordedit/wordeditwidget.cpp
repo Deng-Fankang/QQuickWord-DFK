@@ -16,14 +16,14 @@ namespace WordEdit {
 
 	void SetTextFormat(const TextFormat& format, QTextBlockFormat& block_format, QTextCharFormat& char_format) {
 		QFont font;
-		font.setItalic(format.font_italic == 1);
-		font.setBold(format.font_bold == 1);
-		font.setPointSize(format.font_size);
-		font.setFamily(format.font_name);
+		font.setItalic(format.font.font_italic == 1);
+		font.setBold(format.font.font_bold == 1);
+		font.setPointSize(format.font.font_size);
+		font.setFamily(format.font.font_name);
 		char_format.setFont(font);
-		char_format.setFontWordSpacing(format.font_spacing);
+		char_format.setFontWordSpacing(format.font.font_spacing);
 
-		block_format.setTextIndent(format.first_line_indent);
+		block_format.setTextIndent(format.para_format.first_line_indent);
 	}
 
 	WordEditWidget::WordEditWidget(QWidget* parent)

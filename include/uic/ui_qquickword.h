@@ -28,6 +28,7 @@ public:
     QAction *actionexport;
     QAction *actionselect;
     QAction *actionclear;
+    QAction *actionmatch;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menufile;
@@ -39,7 +40,7 @@ public:
     {
         if (QQuickWordClass->objectName().isEmpty())
             QQuickWordClass->setObjectName(QString::fromUtf8("QQuickWordClass"));
-        QQuickWordClass->resize(943, 436);
+        QQuickWordClass->resize(941, 436);
         actionimport = new QAction(QQuickWordClass);
         actionimport->setObjectName(QString::fromUtf8("actionimport"));
         actionexport = new QAction(QQuickWordClass);
@@ -48,12 +49,14 @@ public:
         actionselect->setObjectName(QString::fromUtf8("actionselect"));
         actionclear = new QAction(QQuickWordClass);
         actionclear->setObjectName(QString::fromUtf8("actionclear"));
+        actionmatch = new QAction(QQuickWordClass);
+        actionmatch->setObjectName(QString::fromUtf8("actionmatch"));
         centralWidget = new QWidget(QQuickWordClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         QQuickWordClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(QQuickWordClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 943, 26));
+        menuBar->setGeometry(QRect(0, 0, 941, 26));
         menufile = new QMenu(menuBar);
         menufile->setObjectName(QString::fromUtf8("menufile"));
         menutmplate = new QMenu(menuBar);
@@ -70,6 +73,7 @@ public:
         menuBar->addAction(menutmplate->menuAction());
         menufile->addAction(actionimport);
         menufile->addAction(actionexport);
+        menufile->addAction(actionmatch);
         menufile->addAction(actionclear);
         menutmplate->addAction(actionselect);
 
@@ -85,6 +89,7 @@ public:
         actionexport->setText(QCoreApplication::translate("QQuickWordClass", "\345\257\274\345\207\272", nullptr));
         actionselect->setText(QCoreApplication::translate("QQuickWordClass", "\351\200\211\346\213\251", nullptr));
         actionclear->setText(QCoreApplication::translate("QQuickWordClass", "\346\270\205\351\231\244", nullptr));
+        actionmatch->setText(QCoreApplication::translate("QQuickWordClass", "\345\214\271\351\205\215", nullptr));
         menufile->setTitle(QCoreApplication::translate("QQuickWordClass", "\346\226\207\344\273\266", nullptr));
         menutmplate->setTitle(QCoreApplication::translate("QQuickWordClass", "\346\250\241\346\235\277", nullptr));
     } // retranslateUi

@@ -21,6 +21,87 @@ struct AreaPos {
     AreaType area_type;
 };
 
+WdListGalleryType GetListGalleryType(WdListType list_type)
+{
+    WdListGalleryType gallery_type = wdBulletGallery;
+    if (list_type == wdListBullet)
+    {
+        gallery_type = wdBulletGallery;
+    }
+    else if (list_type == wdListSimpleNumbering)
+    {
+        gallery_type = wdNumberGallery;
+    }
+    else if (list_type == wdListOutlineNumbering)
+    {
+        gallery_type = wdOutlineNumberGallery;
+    }
+    return gallery_type;
+}
+
+
+void SetTextFont(QAxObject* text_font, const Font& font_data)
+{
+    text_font->setProperty("Name", font_data.font_name);//设置字体
+    text_font->setProperty("Size", font_data.font_size);//设置字体大小
+    text_font->setProperty("Bold", font_data.font_bold);
+    text_font->setProperty("Italic", font_data.font_italic);
+    text_font->setProperty("Spacing", font_data.font_spacing);
+    text_font->setProperty("Color", font_data.font_color);
+    text_font->setProperty("NumberSpacing", font_data.font_number_spacing);
+    text_font->setProperty("NameFarEast", font_data.font_name_fareast);
+    text_font->setProperty("NameAscii", font_data.font_name_ascii);
+    text_font->setProperty("NumberSpacing", font_data.font_number_spacing);
+}
+
+void GetTextFont(QAxObject* text_font, Font& font_data)
+{
+    font_data.font_bold = text_font->property("Bold").toBool();
+    font_data.font_italic = text_font->property("Italic").toBool();
+    font_data.font_size = text_font->property("Size").toFloat();
+    font_data.font_spacing = text_font->property("Spacing").toFloat();
+    font_data.font_number_spacing = text_font->property("NumberSpacing").toFloat();
+    font_data.font_color = text_font->property("Color").toInt();
+    font_data.font_name = text_font->property("Name").toString();
+    font_data.font_name_fareast = text_font->property("NameFarEast").toString();
+    font_data.font_name_ascii = text_font->property("NameAscii").toString();
+}
+
+void GetTextParaFormat(QAxObject* para_format, ParaFormat& para_format_data)
+{
+    para_format_data.first_line_indent = para_format->property("FirstLineIndent").toFloat();
+    para_format_data.line_spacing = para_format->property("LineSpacing").toFloat();
+    para_format_data.line_spacing_rule = para_format->property("LineSpacingRule").toInt();
+
+    para_format_data.line_unit_after = para_format->property("LineUnitAfter").toFloat();
+    para_format_data.line_unit_before = para_format->property("LineUnitBefore").toFloat();
+    para_format_data.left_indent = para_format->property("LeftIndent").toFloat();
+    para_format_data.right_indent = para_format->property("RightIndent").toFloat();
+    para_format_data.spacing_after = para_format->property("SpaceAfter").toFloat();
+    para_format_data.spacing_before = para_format->property("SpaceBefore").toFloat();
+    para_format_data.spacing_after_auto = para_format->property("SpaceAfterAuto").toInt();
+    para_format_data.spacing_before_auto = para_format->property("SpaceBeforeAuto").toInt();
+    para_format_data.alignment = para_format->property("Alignment").toInt();
+}
+
+void SetTextParaFormat(QAxObject* para_format, const ParaFormat& para_format_data)
+{
+    para_format->setProperty("FirstLineIndent", para_format_data.first_line_indent);
+    para_format->setProperty("LineSpacing", para_format_data.line_spacing);
+    para_format->setProperty("LineSpacingRule", para_format_data.line_spacing_rule);
+    para_format->setProperty("LineUnitAfter", para_format_data.line_unit_after);
+    para_format->setProperty("LineUnitBefore", para_format_data.line_unit_before);
+    para_format->setProperty("LineSpacing", para_format_data.line_spacing);
+
+    para_format->setProperty("Alignment", para_format_data.alignment);
+    para_format->setProperty("LeftIndent", para_format_data.left_indent);
+    para_format->setProperty("RightIndent", para_format_data.right_indent);
+    para_format->setProperty("SpaceAfter", para_format_data.spacing_after);
+    para_format->setProperty("SpaceBefore", para_format_data.spacing_before);
+    para_format->setProperty("SpaceAfterAuto", para_format_data.spacing_after_auto);
+    para_format->setProperty("SpaceBeforeAuto", para_format_data.spacing_before_auto);
+}
+
 
 void SetTextFormat(QAxObject* text_range, const TextFormat& text_format, bool force_style=true)
 {
@@ -30,30 +111,74 @@ void SetTextFormat(QAxObject* text_range, const TextFormat& text_format, bool fo
     }
     QAxObject* text_font = text_range->querySubObject("Font");
     QAxObject* para_format = text_range->querySubObject("ParagraphFormat");
-    text_font->setProperty("Name", text_format.font_name);//设置字体
-    text_font->setProperty("Size", text_format.font_size);//设置字体大小
-    text_font->setProperty("Bold", text_format.font_bold);
-    text_font->setProperty("Italic", text_format.font_italic);
-    text_font->setProperty("Spacing", text_format.font_spacing);
-    text_font->setProperty("NumberSpacing", text_format.font_number_spacing);
-    text_font->setProperty("NameFarEast", text_format.font_name_fareast);
-    text_font->setProperty("NameAscii", text_format.font_name_ascii);
-    text_font->setProperty("NumberSpacing", text_format.font_number_spacing);
-    para_format->setProperty("FirstLineIndent", text_format.first_line_indent);
-    para_format->setProperty("LineSpacing", text_format.line_spacing);
-    para_format->setProperty("LineSpacingRule", text_format.line_spacing_rule);
-    para_format->setProperty("LineUnitAfter", text_format.line_unit_after);
-    para_format->setProperty("LineUnitBefore", text_format.line_unit_before);
-    para_format->setProperty("LineSpacing", text_format.line_spacing);
+    SetTextFont(text_font, text_format.font);
+    SetTextParaFormat(para_format, text_format.para_format);
+}
 
-    para_format->setProperty("Alignment", text_format.alignment);
-    para_format->setProperty("LeftIndent", text_format.left_indent);
-    para_format->setProperty("RightIndent", text_format.right_indent);
-    para_format->setProperty("SpaceAfter", text_format.spacing_after);
-    para_format->setProperty("SpaceBefore", text_format.spacing_before);
-    para_format->setProperty("SpaceAfterAuto", text_format.spacing_after_auto);
-    para_format->setProperty("SpaceBeforeAuto", text_format.spacing_before_auto);
 
+void SetBordersFormat(QAxObject* borders, const BordersFormat& borders_format, bool is_table)
+{
+    assert(borders != nullptr);
+    borders->setProperty("DistanceFromBottom", borders_format.distance_from_bottom);
+    borders->setProperty("DistanceFromLeft", borders_format.distance_from_left);
+    borders->setProperty("DistanceFromRight", borders_format.distance_from_right);
+    borders->setProperty("DistanceFromTop", borders_format.distance_from_top);
+
+    borders->setProperty("Enable", borders_format.enable);
+    //borders->setProperty("InsideLineStyle", borders_format.inside_line_style);
+    borders->setProperty("InsideLineWidth", borders_format.inside_line_width);
+    for (WdBorderType btype = wdBorderDiagonalUp; btype <= wdBorderTop; btype = WdBorderType(btype + 1))
+    {
+        if (!is_table)
+        {
+            if (btype == wdBorderVertical || btype == wdBorderHorizontal)
+            {
+                continue;
+            }
+        }
+        QAxObject* border = borders->querySubObject("Item(WdBorderType)", btype);
+        if (border)
+        {
+            border->setProperty("Color", borders_format.border_format[btype + 8].color);
+            border->setProperty("LineStyle", borders_format.border_format[btype + 8].line_style);
+            //border->setProperty("LineWidth", borders_format.border_format[btype + 8].line_width);
+            border->setProperty("Visible", borders_format.border_format[btype + 8].visible);
+        }
+        
+    }
+}
+
+void GetBordersFormat(QAxObject* borders, BordersFormat& borders_format, bool is_table)
+{
+    assert(borders != nullptr);
+    //borders->property("DistanceFrom");
+    //borders_format.distance_from = borders->property("DistanceFrom").toInt();
+    borders_format.distance_from_bottom = borders->property("DistanceFromBottom").toInt();
+    borders_format.distance_from_left = borders->property("DistanceFromLeft").toInt();
+    borders_format.distance_from_right = borders->property("DistanceFromRight").toInt();
+    borders_format.distance_from_top = borders->property("DistanceFromTop").toInt();
+    borders_format.enable = borders->property("Enable").toInt();
+    borders_format.inside_line_style = borders->property("InsideLineStyle").toInt();
+    borders_format.inside_line_width = borders->property("InsideLineWidth").toInt();
+
+    for (WdBorderType btype = wdBorderDiagonalUp; btype <= wdBorderTop; btype = WdBorderType(btype + 1))
+    {
+        if (!is_table)
+        {
+            if (btype == wdBorderVertical || btype == wdBorderHorizontal)
+            {
+                continue;
+            }
+        }
+        QAxObject* border = borders->querySubObject("Item(WdBorderType)", btype);
+        if (border)
+        {
+            borders_format.border_format[btype + 8].color = border->property("Color").toInt();
+            borders_format.border_format[btype + 8].line_style = border->property("LineStyle").toInt();
+            borders_format.border_format[btype + 8].line_width = border->property("LineWidth").toInt();
+            borders_format.border_format[btype + 8].visible = border->property("Visible").toInt();
+        }
+    }
 }
 
 
@@ -76,6 +201,29 @@ void SetTableFormat(QAxObject* table, const TableFormat& table_format)
     table->setProperty("RightPadding", table_format.right_padding);
     table->setProperty("LeftIndent", table_format.left_indent);
     //table->querySubObject("Rows")->setProperty("Alignment", table_format.alignment);
+    SetBordersFormat(table->querySubObject("Borders"), table_format.borders_format, true);
+}
+
+
+void GetTableFormat(QAxObject* table, TableFormat& table_format)
+{
+    table_format.style_name = table->querySubObject("Style")->property("NameLocal").toString();
+    table_format.alignment = table->querySubObject("Rows")->property("Alignment").toInt();
+    table_format.allow_auto_fit = table->property("AllowAutoFit").toBool();
+    table_format.allow_page_break = table->property("AllowPageBreaks").toBool();
+    table_format.apply_style_first_col = table->property("ApplyStyleFirstColumn").toBool();
+    table_format.apply_style_heading = table->property("ApplyStyleHeadingRows").toBool();
+    table_format.apply_style_last_col = table->property("ApplyStyleLastColumn").toBool();
+    table_format.apply_style_last_row = table->property("ApplyStyleLastRow").toBool();
+    table_format.spacing = table->property("Spacing").toFloat();
+    table_format.table_direction = table->property("TableDirection").toInt();
+    table_format.auto_format_type = table->property("AutoFormatType").toInt();
+    table_format.top_padding = table->property("TopPadding").toFloat();
+    table_format.bottom_padding = table->property("BottomPadding").toFloat();
+    table_format.left_padding = table->property("LeftPadding").toFloat();
+    table_format.right_padding = table->property("RightPadding").toFloat();
+    table_format.left_indent = table->property("LeftIndent").toFloat();
+    GetBordersFormat(table->querySubObject("Borders"), table_format.borders_format, true);
 }
 
 
@@ -96,6 +244,24 @@ void SetCellFormat(QAxObject* cell, const TableAreaContent::CellFormat& cell_for
     cell->setProperty("VerticalAlignment", cell_format.ver_alignment);
     cell->setProperty("WordWrap", cell_format.word_wrap);
     cell->setProperty("FitText", cell_format.fit_text);
+    SetBordersFormat(cell->querySubObject("Borders"), cell_format.borders_format, false);
+}
+
+void GetCellFormat(QAxObject* cell, TableAreaContent::CellFormat& cell_format)
+{
+    cell_format.height = cell->property("Height").toFloat();
+    cell_format.width = cell->property("Width").toFloat();
+    cell_format.height_rule = cell->property("HeightRule").toInt();
+    cell_format.prefer_width = cell->property("PreferredWidth").toFloat();
+    cell_format.prefer_width_type = cell->property("PreferredWidthType").toInt();
+    cell_format.top_padding = cell->property("TopPadding").toFloat();
+    cell_format.bottom_padding = cell->property("BottomPadding").toFloat();
+    cell_format.left_padding = cell->property("LeftPadding").toFloat();
+    cell_format.right_padding = cell->property("RightPadding").toFloat();
+    cell_format.ver_alignment = cell->property("VerticalAlignment").toInt();
+    cell_format.word_wrap = cell->property("WordWrap").toBool();
+    cell_format.fit_text = cell->property("FitText").toBool();
+    GetBordersFormat(cell->querySubObject("Borders"), cell_format.borders_format, false);
 }
 
 
@@ -109,7 +275,6 @@ WordReadOperate::WordReadOperate(const QString& file_name)
     // 打开Word文档
     QAxObject* documents = word->querySubObject("Documents");
     doc = documents->querySubObject("Open(const QString&)", file_name);
-    heading_style_name = { QString::fromLocal8Bit("标题 1"), QString::fromLocal8Bit("标题 2"), QString::fromLocal8Bit("标题 3") };
 }
 
 WordReadOperate::~WordReadOperate()
@@ -155,7 +320,7 @@ const QVector<AreaPos> GetAreaInfo(QAxObject* tables, QAxObject* paralists, QAxO
             area_pos.idx = i;
             area_pos.area_type = IMAGE;
             area_pos.start = image->querySubObject("Range")->property("Start").toInt();
-            area_pos.end = image->querySubObject("Range")->property("End").toInt();
+            area_pos.end = image->querySubObject("Range")->property("End").toInt() + 1;
             area_pos_vector.push_back(area_pos);
         }
     }
@@ -171,36 +336,66 @@ void GetTextAreaInfo(QAxObject* range, QVector<QString>& text_list, QVector<Text
         text_list.push_back(para_range->property("Text").toString().remove('\r'));
         TextFormat format;
         QAxObject* first_char_range = para_range->querySubObject("Characters")->querySubObject("First");
-        QAxObject* font = first_char_range->querySubObject("Font");
+        QAxObject* text_font = first_char_range->querySubObject("Font");
         QAxObject* para_format = para_range->querySubObject("ParagraphFormat");
-        format.font_bold = font->property("Bold").toBool();
-        format.font_italic = font->property("Italic").toBool();
-        format.font_size = font->property("Size").toFloat();
-        format.font_spacing = font->property("Spacing").toFloat();
-        format.font_number_spacing = font->property("NumberSpacing").toFloat();
-        format.font_name = font->property("Name").toString();
-        format.font_name_fareast = font->property("NameFarEast").toString();
-        format.font_name_ascii = font->property("NameAscii").toString();
-        format.first_line_indent = para_format->property("FirstLineIndent").toFloat();
-        format.line_spacing = para_format->property("LineSpacing").toFloat();
-        format.line_spacing_rule = para_format->property("LineSpacingRule").toInt();
-
-        format.line_unit_after = para_format->property("LineUnitAfter").toFloat();
-        format.line_unit_before = para_format->property("LineUnitBefore").toFloat();
-        format.left_indent = para_format->property("LeftIndent").toFloat();
-        format.right_indent = para_format->property("RightIndent").toFloat();
-        format.spacing_after = para_format->property("SpaceAfter").toFloat();
-        format.spacing_before = para_format->property("SpaceBefore").toFloat();
-        format.spacing_after_auto = para_format->property("SpaceAfterAuto").toInt();
-        format.spacing_before_auto = para_format->property("SpaceBeforeAuto").toInt();
+        GetTextFont(text_font, format.font);
+        GetTextParaFormat(para_format, format.para_format);
         format.style_name = para_range->querySubObject("Style")->property("NameLocal").toString();
-        format.alignment = para_format->property("Alignment").toInt();
         format_list.push_back(format);
     }
 }
 
+
+void GetListFormat(QAxObject* list_format, ListFormat& list_format_data)
+{
+    list_format_data.list_value = list_format->property("ListValue").toInt();
+    list_format_data.list_level_number = list_format->property("ListLevelNumber").toInt();
+    list_format_data.list_string = list_format->property("ListString").toString();
+    QString name = list_format->querySubObject("List")->property("StyleName").toString();
+    bool single_list = list_format->property("SingleList").toBool();
+    bool single_list_template = list_format->property("SingleListTemplate").toBool();
+    int list_type = list_format->property("ListType").toInt();
+    list_format_data.list_type = WdListType(list_type);
+}
+
+void GetListTemplateFormat(QAxObject* list_template, ListTemplateFormat& list_template_format_data)
+{
+    list_template_format_data.template_name = list_template->property("Name").toString();
+    list_template_format_data.outline_numberd = list_template->property("OutlineNumbered").toBool();
+    for (int level = 1; level <= 9; level++)
+    {
+        QAxObject* list_level = list_template->querySubObject("ListLevels")->querySubObject("Item(int)", level);
+
+        list_template_format_data.list_levels[level - 1].linked_style = list_level->property("LinkedStyle").toString();
+        list_template_format_data.list_levels[level - 1].number_format = list_level->property("NumberFormat").toString();
+        list_template_format_data.list_levels[level - 1].number_pos = list_level->property("NumberPosition").toFloat();
+        list_template_format_data.list_levels[level - 1].number_style = list_level->property("NumberStyle").toInt();
+        list_template_format_data.list_levels[level - 1].text_pos = list_level->property("TextPosition").toFloat();
+        list_template_format_data.list_levels[level - 1].index = list_level->property("Index").toInt();
+        list_template_format_data.list_levels[level - 1].reset_on_higher = list_level->property("ResetOnHigher").toInt();
+        list_template_format_data.list_levels[level - 1].start_at = list_level->property("StartAt").toInt();
+        list_template_format_data.list_levels[level - 1].tab_pos = list_level->property("TabPosition").toFloat();
+        list_template_format_data.list_levels[level - 1].trailing_character = list_level->property("TrailingCharacter").toInt();
+        GetTextFont(list_level->querySubObject("Font"), list_template_format_data.list_levels[level - 1].text_font);
+    }
+}
+
+void GetParaListFormat(QAxObject* para_range, ListTemplateFormat& list_template_format_data, ListFormat& list_format_data)
+{
+    QAxObject* list_format = para_range->querySubObject("ListFormat");
+    GetListFormat(list_format, list_format_data);
+    QAxObject* list_template = list_format->querySubObject("ListTemplate");
+    GetListTemplateFormat(list_template, list_template_format_data);
+    list_template_format_data.list_type = list_format_data.list_type;
+}
+
+
 void AppendContents(TitleAreaContent* node, QAxObject* doc, int start, int end)
 {
+    if (start >= end)
+    {
+        return;
+    }
     QAxObject* content_area = doc->querySubObject("Range(int Start, int End)", start, end);
     QAxObject* tables = content_area->querySubObject("Tables");
     QAxObject* paralists = content_area->querySubObject("ListParagraphs");
@@ -225,23 +420,7 @@ void AppendContents(TitleAreaContent* node, QAxObject* doc, int start, int end)
             QVector<QVector<TableAreaContent::CellAreaContent>> data(rowCount, QVector<TableAreaContent::CellAreaContent>(columnCount));
 
             TableFormat format;
-            format.style_name = table->querySubObject("Style")->property("NameLocal").toString();
-            format.alignment = table->querySubObject("Rows")->property("Alignment").toInt();
-
-            format.allow_auto_fit = table->property("AllowAutoFit").toBool();
-            format.allow_page_break = table->property("AllowPageBreaks").toBool();
-            format.apply_style_first_col = table->property("ApplyStyleFirstColumn").toBool();
-            format.apply_style_heading = table->property("ApplyStyleHeadingRows").toBool();
-            format.apply_style_last_col = table->property("ApplyStyleLastColumn").toBool();
-            format.apply_style_last_row = table->property("ApplyStyleLastRow").toBool();
-            format.spacing = table->property("Spacing").toFloat();
-            format.table_direction = table->property("TableDirection").toInt();
-            format.auto_format_type = table->property("AutoFormatType").toInt();
-            format.top_padding = table->property("TopPadding").toFloat();
-            format.bottom_padding = table->property("BottomPadding").toFloat();
-            format.left_padding = table->property("LeftPadding").toFloat();
-            format.right_padding = table->property("RightPadding").toFloat();
-            format.left_indent = table->property("LeftIndent").toFloat();
+            GetTableFormat(table, format);
 
             for (int row = 1; row <= rowCount; row++)
             {
@@ -250,19 +429,7 @@ void AppendContents(TitleAreaContent* node, QAxObject* doc, int start, int end)
                     TableAreaContent::CellFormat cell_format;
                     QAxObject* cell = table->querySubObject("Cell(int, int)", row, col);
                     QAxObject* cell_range = cell->querySubObject("Range");
-
-                    cell_format.height = cell->property("Height").toFloat();
-                    cell_format.width = cell->property("Width").toFloat();
-                    cell_format.height_rule = cell->property("HeightRule").toInt();
-                    cell_format.prefer_width = cell->property("PreferredWidth").toFloat();
-                    cell_format.prefer_width_type = cell->property("PreferredWidthType").toInt();
-                    cell_format.top_padding = cell->property("TopPadding").toFloat();
-                    cell_format.bottom_padding = cell->property("BottomPadding").toFloat();
-                    cell_format.left_padding = cell->property("LeftPadding").toFloat();
-                    cell_format.right_padding = cell->property("RightPadding").toFloat();
-                    cell_format.ver_alignment = cell->property("VerticalAlignment").toInt();
-                    cell_format.word_wrap = cell->property("WordWrap").toBool();
-                    cell_format.fit_text = cell->property("FitText").toBool();
+                    GetCellFormat(cell, cell_format);
                     QVector<QString> text_list;
                     QVector<TextFormat> format_list;
                     GetTextAreaInfo(cell_range, text_list, format_list);
@@ -282,41 +449,26 @@ void AppendContents(TitleAreaContent* node, QAxObject* doc, int start, int end)
         }
         else if (area_pos_vector[idx].area_type == LIST) {
             QAxObject* para_range = paralists->querySubObject("Item(int)", area_pos_vector[idx].idx)->querySubObject("Range");
-            ListFormat format;
+            ListFormat list_format_data;
             QAxObject* list_format = para_range->querySubObject("ListFormat");
-            format.list_value = list_format->property("ListValue").toInt();
-            format.list_level_number = list_format->property("ListLevelNumber").toInt();
-            format.list_string = list_format->property("ListString").toString();
-            QString name = list_format->querySubObject("List")->property("StyleName").toString();
-            bool single_list = list_format->property("SingleList").toBool();
-            bool single_list_template = list_format->property("SingleListTemplate").toBool();
-            format.list_style_name = para_range->querySubObject("ListStyle")->property("NameLocal").toString();
-
+            GetListFormat(list_format, list_format_data);
             QVector<QString> text_list;
             QVector<TextFormat> format_list;
             GetTextAreaInfo(para_range, text_list, format_list);
 
             QString text = para_range->property("Text").toString().remove('\r');
-            if (format.list_value == 1)
+            if (list_format_data.list_value == 1)
             {
-                ListTemplateFormat template_format;
+                ListTemplateFormat list_template_format_data;
+                list_template_format_data.list_type = list_format_data.list_type;
                 QAxObject* list_template = list_format->querySubObject("ListTemplate");
-                template_format.template_name = list_template->property("Name").toString();
-                template_format.list_type = list_format->property("ListType").toInt();
-                for (int level = 1; level <= 9; level++)
-                {
-                    QAxObject* list_level = list_template->querySubObject("ListLevels")->querySubObject("Item(int)", level);
-
-                    template_format.list_levels[level - 1].number_format = list_level->property("NumberFormat").toString();
-                    template_format.list_levels[level - 1].number_pos = list_level->property("NumberPosition").toFloat();
-                    template_format.list_levels[level - 1].number_style = list_level->property("NumberStyle").toInt();
-                    template_format.list_levels[level - 1].text_pos = list_level->property("TextPosition").toFloat();
-                }
-                node->AppendListAreaContent(text, template_format, format, format_list[0]);
+                GetListTemplateFormat(list_template, list_template_format_data);
+                
+                node->AppendListAreaContent(text, list_template_format_data, list_format_data, format_list[0]);
             }
             else
             {
-                node->AppendListItem(text, format, format_list[0]);
+                node->AppendListItem(text, list_format_data, format_list[0]);
             }
         }
         else if (area_pos_vector[idx].area_type == IMAGE)
@@ -387,15 +539,19 @@ TitleAreaContent* WordReadOperate::CreateWordNode()
         }
         int end = range->property("End").toInt();
         QString style_name = range->querySubObject("Style")->property("NameLocal").toString();
-        if (std::find(heading_style_name.begin(), heading_style_name.end(), style_name) != heading_style_name.end()) {
+        TitleAreaContent* top_title = title_stack.top();
+        int last_end = heading_vector.last().end;
+        if (std::find(HEADING_STYLE_NAME.begin(), HEADING_STYLE_NAME.end(), style_name) != HEADING_STYLE_NAME.end()) {
             Heading st;
             st.style_name = style_name;
             st.start = start;
             st.end = end;
-            st.level = WordTitleLevel(heading_style_name.indexOf(style_name) + 1);
-            TitleAreaContent* top_title = title_stack.top();
-            int last_end = heading_vector.last().end;
+            st.level = WordTitleLevel(HEADING_STYLE_NAME.indexOf(style_name) + 1);
             heading_vector.push_back(st);
+
+            ListTemplateFormat list_template_format;
+            ListFormat list_format;
+            GetParaListFormat(range, list_template_format, list_format);
             if (top_title->GetTitleLevel() < st.level)
             {
                 AppendContents(top_title, doc, last_end, st.start);
@@ -403,7 +559,12 @@ TitleAreaContent* WordReadOperate::CreateWordNode()
                 QVector<TextFormat> format_list;
                 GetTextAreaInfo(range, text_list, format_list);
                 QString title = range->property("Text").toString().remove('\r');
+                
+
+                list_template_format.list_levels[st.level - 1].text_font = format_list[0].font;
                 TitleAreaContent* title_area = static_cast<TitleAreaContent*>(top_title->AppendTitleAreaContent(title, format_list[0]));
+                title_area->list_template_format = list_template_format;
+                title_area->list_format = list_format;
                 title_stack.push(title_area);
             }
             else
@@ -414,21 +575,27 @@ TitleAreaContent* WordReadOperate::CreateWordNode()
                     title_stack.pop();
                     top_title = title_stack.top();
                 }
-                //TitleAreaContent* node = new TitleAreaContent(range->property("Text").toString().remove('\r'), top_node->parent);
                 QVector<QString> text_list;
                 QVector<TextFormat> format_list;
                 GetTextAreaInfo(range, text_list, format_list);
                 QString title = range->property("Text").toString().remove('\r');
+                list_template_format.list_levels[st.level - 1].text_font = format_list[0].font;
                 TitleAreaContent* title_area = static_cast<TitleAreaContent*>(top_title->GetParent()->AppendTitleAreaContent(title, format_list[0]));
+                title_area->list_template_format = list_template_format;
+                title_area->list_format = list_format;
                 title_stack.push_back(title_area);
             }
         }
     }
+    //最后一个标题
+    QAxObject* range = paragraphs->querySubObject("Item(int)", paragraph_count)->querySubObject("Range");
+    AppendContents(title_stack.top(), doc, heading_vector.last().end, range->property("End").toInt());
     return root;
 }
 
 WordWriteOperate::WordWriteOperate(const QString& file_name)
 {
+    is_set = false;
     save_name = file_name;
     word = new QAxObject("Word.Application");
 
@@ -453,6 +620,25 @@ void WordWriteOperate::WriteToWord(TitleAreaContent* root)
     if (root == nullptr) return;
     QAxObject* selection = doc->querySubObject("ActiveWindow")->querySubObject("Selection");
     DoWriteToWord(root, selection);
+}
+
+void WordWriteOperate::FormatList(QAxObject* selection, WdListGalleryType gallery_type, int tid, int level, const ListTemplateFormat& list_template_format_data)
+{
+    QAxObject* list_template = word->querySubObject("ListGalleries")->querySubObject\
+        ("Item(int)", int(gallery_type))->querySubObject("ListTemplates")\
+        ->querySubObject("Item(int)", tid);
+    QAxObject* list_level = list_template->querySubObject("ListLevels")->querySubObject("Item(int)", level);
+    list_level->setProperty("LinkedStyle", list_template_format_data.list_levels[level - 1].linked_style);
+    list_level->setProperty("NumberFormat", list_template_format_data.list_levels[level - 1].number_format);
+    list_level->setProperty("NumberPosition", list_template_format_data.list_levels[level - 1].number_pos);
+    list_level->setProperty("NumberStyle", list_template_format_data.list_levels[level - 1].number_style);
+    list_level->setProperty("TextPosition", list_template_format_data.list_levels[level - 1].text_pos);
+
+    list_level->setProperty("ResetOnHigher", list_template_format_data.list_levels[level - 1].reset_on_higher);
+    list_level->setProperty("StartAt", list_template_format_data.list_levels[level - 1].start_at);
+    list_level->setProperty("TabPosition", list_template_format_data.list_levels[level - 1].tab_pos);
+    SetTextFont(list_level->querySubObject("Font"), list_template_format_data.list_levels[level - 1].text_font);
+    selection->querySubObject("Range")->querySubObject("ListFormat")->dynamicCall("ApplyListTemplate(QVariant, QVariant&, QVariant&, QVariant&)", list_template->asVariant(), true, 0, 0);
 }
 
 void WordWriteOperate::DoWriteToWord(TitleAreaContent* root, QAxObject* selection)
@@ -511,38 +697,16 @@ void WordWriteOperate::DoWriteToWord(TitleAreaContent* root, QAxObject* selectio
         else if ((*it)->GetAreaType() == LIST)
         {
             ListAreaContent* list_area = dynamic_cast<ListAreaContent*>(*it);
-            int gallery_type = 0;
-            if (list_area->list_template_format.list_type == 2)
-            {
-                gallery_type = 1;
-            }
-            else if (list_area->list_template_format.list_type == 3)
-            {
-                gallery_type = 2;
-            }
-            if (gallery_type == 1 || gallery_type == 2)
-            {
-                QAxObject* list_template = word->querySubObject("ListGalleries")->querySubObject\
-                    ("Item(int)", gallery_type)->querySubObject("ListTemplates")\
-                    ->querySubObject("Item(int)", 1);
-                QAxObject* list_level = list_template->querySubObject("ListLevels")->querySubObject("Item(int)", 1);
-                list_level->setProperty("NumberFormat", list_area->list_template_format.list_levels[0].number_format);
-                list_level->setProperty("NumberPosition", list_area->list_template_format.list_levels[0].number_pos);
-                list_level->setProperty("NumberStyle", list_area->list_template_format.list_levels[0].number_style);
-                list_level->setProperty("TextPosition", list_area->list_template_format.list_levels[0].text_pos);
 
-                QAxObject* pRangef = selection->querySubObject("Range");
+            WdListGalleryType gallery_type = GetListGalleryType(list_area->list_template_format.list_type);
+            FormatList(selection, gallery_type, 1, 1, list_area->list_template_format);
+            
+            for (int i = 0; i < list_area->list_data.size(); i++)
+            {
+                SetTextFormat(selection, list_area->list_data[i].text_content.text_format, false);
 
-                QAxObject* paragraphs = doc->querySubObject("Paragraphs");
-                
-                selection->querySubObject("Range")->querySubObject("ListFormat")->dynamicCall("ApplyListTemplate(QVariant, QVariant&, QVariant&, QVariant&)", list_template->asVariant(), true, 0, 0);
-                for (int i = 0; i < list_area->list_data.size(); i++)
-                {
-                    SetTextFormat(selection, list_area->list_data[i].text_content.text_format, false);
-
-                    selection->dynamicCall("TypeText(const QString&)", list_area->list_data[i].text_content.text_data);
-                    selection->dynamicCall("TypeParagraph(void)");//插入回车
-                }
+                selection->dynamicCall("TypeText(const QString&)", list_area->list_data[i].text_content.text_data);
+                selection->dynamicCall("TypeParagraph(void)");//插入回车
             }
         }
         else if ((*it)->GetAreaType() == IMAGE)
@@ -563,10 +727,16 @@ void WordWriteOperate::DoWriteToWord(TitleAreaContent* root, QAxObject* selectio
         else if ((*it)->GetAreaType() == TITLE_AREA)
         {
             TitleAreaContent* title_area = dynamic_cast<TitleAreaContent*>(*it);
-
+            WdListGalleryType gallery_type = GetListGalleryType(title_area->list_template_format.list_type);
+            int level = title_area->GetTitleLevel();
+            QAxObject* style = doc->querySubObject("Styles")->querySubObject("Item(QVariant)", HEADING_STYLE_NAME.at(level - 1));
+            SetTextFont(style->querySubObject("Font"), title_area->title_format.font);
+            SetTextParaFormat(style->querySubObject("ParagraphFormat"), title_area->title_format.para_format);
             SetTextFormat(selection, title_area->title_format);
-
             selection->dynamicCall("TypeText(const QString&)", (title_area->title));
+            
+            FormatList(selection, gallery_type, 2, level, title_area->list_template_format);
+            
             selection->dynamicCall("TypeParagraph(void)");//插入回车
             DoWriteToWord(title_area, selection);
         }

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>943</width>
+    <width>941</width>
     <height>436</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>943</width>
+     <width>941</width>
      <height>26</height>
     </rect>
    </property>
@@ -29,6 +29,7 @@
     </property>
     <addaction name="actionimport"/>
     <addaction name="actionexport"/>
+    <addaction name="actionmatch"/>
     <addaction name="actionclear"/>
    </widget>
    <widget class="QMenu" name="menutmplate">
@@ -67,6 +68,11 @@
   <action name="actionclear">
    <property name="text">
     <string>清除</string>
+   </property>
+  </action>
+  <action name="actionmatch">
+   <property name="text">
+    <string>匹配</string>
    </property>
   </action>
  </widget>

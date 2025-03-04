@@ -48,6 +48,9 @@
     <Filter Include="config\qss">
       <UniqueIdentifier>{f27540e3-39cf-4dff-ac95-ed084e35703a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="config\image">
+      <UniqueIdentifier>{f41bd9c4-6475-49aa-9540-6274a7a9af5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="qquickword.qrc">
@@ -170,6 +173,15 @@
     <ClCompile Include="src\common\treeitem.cpp">
       <Filter>Source Files\common</Filter>
     </ClCompile>
+    <ClCompile Include="src\wordtemplate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\templateformat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\indicator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\uic\ui_qquickword.h">
@@ -244,10 +256,51 @@
     <ClInclude Include="include\common\treeitem.h">
       <Filter>Header Files\common</Filter>
     </ClInclude>
+    <ClInclude Include="include\wordtemplate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\templateformat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\indicator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config\qss\titletree.qss">
       <Filter>config\qss</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="config\image\branch-closed.png">
+      <Filter>config\image</Filter>
+    </Image>
+    <Image Include="config\image\branch-end.png">
+      <Filter>config\image</Filter>
+    </Image>
+    <Image Include="config\image\branch-more.png">
+      <Filter>config\image</Filter>
+    </Image>
+    <Image Include="config\image\branch-open.png">
+      <Filter>config\image</Filter>
+    </Image>
+    <Image Include="config\image\image.png">
+      <Filter>config\image</Filter>
+    </Image>
+    <Image Include="config\image\list.png">
+      <Filter>config\image</Filter>
+    </Image>
+    <Image Include="config\image\table.png">
+      <Filter>config\image</Filter>
+    </Image>
+    <Image Include="config\image\text.png">
+      <Filter>config\image</Filter>
+    </Image>
+    <Image Include="config\image\title_content.png">
+      <Filter>config\image</Filter>
+    </Image>
+    <Image Include="config\image\vline.png">
+      <Filter>config\image</Filter>
+    </Image>
   </ItemGroup>
 </Project>

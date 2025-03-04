@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="gb2312"?>
+<Doc desc="需求规格说明" id="XQGGSM">
+	<TitleIndicator content="范围">
+		<TitleIndicator content="标识">
+			<TemplateIndicator>
+				<Srcs>
+					<Src>
+						<DocId>RJYZRWS</DocId>
+						<IndicatorId>1.1.1</IndicatorId>
+					</Src>
+				</Srcs>
+				<Format>
+					<TextTemplate></TextTemplate>
+				</Format>
+			</TemplateIndicator>
+		</TitleIndicator>
+		<TitleIndicator content="系统概述">
+			<TemplateIndicator>
+				<Srcs>
+					<Src>
+						<DocId>RJYZRWS</DocId>
+						<IndicatorId>1.2.1</IndicatorId>
+					</Src>
+				</Srcs>
+				<Format>
+					<TextTemplate></TextTemplate>
+				</Format>
+			</TemplateIndicator>
+		</TitleIndicator>
+		<TitleIndicator content="文档概述">
+			<TemplateIndicator>
+				<Srcs>
+					<Src>
+						<DocId>RJYZRWS</DocId>
+						<IndicatorId>1.3.1</IndicatorId>
+					</Src>
+				</Srcs>
+				<Format>
+					<TextTemplate></TextTemplate>
+				</Format>
+			</TemplateIndicator>
+		</TitleIndicator>
+	</TitleIndicator>
+	<TitleIndicator content="引用文档">
+		<TemplateIndicator>
+			<Srcs>
+				<Src>
+					<DocId>RJYZRWS</DocId>
+					<IndicatorId>2.1</IndicatorId>
+				</Src>
+			</Srcs>
+			<Format>
+				<ListTemplate></ListTemplate>
+			</Format>
+		</TemplateIndicator>
+	</TitleIndicator>
+	<TitleIndicator content="需求">
+		<TitleIndicator content="要求的状态和方式">
+			<MutiTemplateIndicator>
+				<Srcs>
+					<Src>
+						<DocId>RJYZRWS</DocId>
+						<IndicatorId>4.1.2.3</IndicatorId>
+					</Src>
+				</Srcs>
+				<Format>
+					<TitleTemplate>
+						<TextTemplate></TextTemplate>
+					</TitleTemplate>
+				</Format>
+			</MutiTemplateIndicator>
+		</TitleIndicator>
+		<TitleIndicator content="CSCI能力需求">
+			<TitleIndicator content="软件功能剖面">
+				<TemplateIndicator>
+					<Srcs>
+						<Src>
+							<DocId>RJYZRWS</DocId>
+							<IndicatorId>4.1.2.2.1</IndicatorId>
+						</Src>
+					</Srcs>
+					<Format>
+						<ImageTemplate></ImageTemplate>
+					</Format>
+				</TemplateIndicator>
+			</TitleIndicator>
+			<MutiTemplateIndicator>
+				<Srcs>
+					<Src>
+						<DocId>RJYZRWS</DocId>
+						<IndicatorId>4.1.1</IndicatorId>
+					</Src>
+				</Srcs>
+				<Format>
+					<TitleTemplate>
+						<TitleTemplate content="能力描述">
+							<TextTemplate></TextTemplate>
+						</TitleTemplate>
+						<TitleTemplate content="输入">
+							<TextTemplate></TextTemplate>
+						</TitleTemplate>
+						<TitleTemplate content="处理过程">
+							<TextTemplate></TextTemplate>
+						</TitleTemplate>
+						<TitleTemplate content="异常情况处理要求">
+							<TextTemplate></TextTemplate>
+						</TitleTemplate>
+						<TitleTemplate content="输出">
+							<TextTemplate></TextTemplate>
+						</TitleTemplate>
+						<TitleTemplate content="满足的各项需求及性能">
+							<TextTemplate></TextTemplate>
+						</TitleTemplate>
+					</TitleTemplate>
+				</Format>
+			</MutiTemplateIndicator>
+		</TitleIndicator>
+
+	</TitleIndicator>
+</Doc>

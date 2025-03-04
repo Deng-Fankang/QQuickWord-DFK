@@ -38,7 +38,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>msvc2019</QtInstall>
-    <QtModules>core;gui;axcontainer;widgets</QtModules>
+    <QtModules>core;gui;axcontainer;widgets;xml</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -124,10 +124,12 @@
     <ClCompile Include="src\common\qulistmodel.cpp" />
     <ClCompile Include="src\common\qutreemodel.cpp" />
     <ClCompile Include="src\common\treeitem.cpp" />
+    <ClCompile Include="src\indicator.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\module_manager.cpp" />
     <ClCompile Include="src\sharefunc.cpp" />
     <ClCompile Include="src\sharemgr.cpp" />
+    <ClCompile Include="src\templateformat.cpp" />
     <ClCompile Include="src\timertest.cpp" />
     <ClCompile Include="src\worddefine.cpp" />
     <ClCompile Include="src\wordedit\wordedit.cpp" />
@@ -143,6 +145,7 @@
     <ClCompile Include="src\wordimport\wordimportwidget.cpp" />
     <ClCompile Include="src\qquickword.cpp" />
     <ClCompile Include="src\wordoperate.cpp" />
+    <ClCompile Include="src\wordtemplate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\basemodule.h" />
@@ -154,12 +157,15 @@
     <ClInclude Include="include\exportview.h" />
     <ClInclude Include="include\global.h" />
     <ClInclude Include="include\importwidgetdelegate.h" />
+    <ClInclude Include="include\indicator.h" />
     <ClInclude Include="include\sharefunc.h" />
+    <ClInclude Include="include\templateformat.h" />
     <ClInclude Include="include\timertest.h" />
     <ClInclude Include="include\worddefine.h" />
     <ClInclude Include="include\wordexportmodel.h" />
     <ClInclude Include="include\wordimportmodel.h" />
     <ClInclude Include="include\wordoperate.h" />
+    <ClInclude Include="include\wordtemplate.h" />
     <QtMoc Include="include\wordimportwidget.h" />
     <QtMoc Include="include\common\qulistmodel.h" />
     <ClInclude Include="include\module_manager.h" />
@@ -177,6 +183,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="config\qss\titletree.qss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="config\image\branch-closed.png" />
+    <Image Include="config\image\branch-end.png" />
+    <Image Include="config\image\branch-more.png" />
+    <Image Include="config\image\branch-open.png" />
+    <Image Include="config\image\image.png" />
+    <Image Include="config\image\list.png" />
+    <Image Include="config\image\table.png" />
+    <Image Include="config\image\text.png" />
+    <Image Include="config\image\title_content.png" />
+    <Image Include="config\image\vline.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

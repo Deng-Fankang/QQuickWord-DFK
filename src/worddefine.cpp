@@ -1,6 +1,24 @@
 #include "worddefine.h"
 #include "qdebug.h"
 
+const QVector<QString> HEADING_STYLE_NAME = {
+        QString::fromLocal8Bit("标题 1"), QString::fromLocal8Bit("标题 2"),
+        QString::fromLocal8Bit("标题 3"), QString::fromLocal8Bit("标题 4"),
+        QString::fromLocal8Bit("标题 5"),
+};
+
+const TextFormat DEFAULT_TEXT_AREA_FORMAT = {
+    {0, 0, 10.5, 0, 0, 0, "等线", "+中文正文", "+西文正文"},
+    {12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3},
+    "正文",
+};
+
+const TextFormat DEFAULT_TITLE_AREA_FORMAT = {
+    {1, 0, 16, 0, 0, 0, "等线", "+中文正文", "+西文正文"},
+    {21, 5, 0, 0, 0, 0, 0, 13, 13, 0, 0, 3},
+    "标题 3",
+};
+
 
 TextAreaContent::TextAreaContent(const QString& text, const TextFormat& f)
 {
@@ -67,11 +85,6 @@ void TableAreaContent::PrintContent()
         }
     }
 }
-
-//TitleAreaContent::TitleAreaContent(TitleAreaContent* node_)
-//{
-//    node = node_;
-//}
 
 void TitleAreaContent::PrintContent()
 {
@@ -197,26 +210,15 @@ TitleAreaContent* TitleAreaContent::GetChildNode(int index)
     return child_title_list.at(index);
 }
 
-//AreaContent* TitleAreaContent::removeChildTitle(TitleAreaContent* node)
-//{
-//    child_title_list.removeOne(node);
-//    auto it = content_list.begin();
-//    for (; it != content_list.end(); it++)
-//    {
-//        if ((*it)->GetAreaType() == TITLE_AREA && (*it) == node)
-//        {
-//            break;
-//        }
-//    }
-//    if (it != content_list.end())
-//    {
-//        AreaContent* ret = *it;
-//        content_list.erase(it);
-//        return ret;
-//    }
-//    
-//    return nullptr;
-//}
+const AreaContent* TitleAreaContent::GetChildContent(int idx) const
+{
+    if (idx < content_list.size())
+    {
+        return content_list.at(idx);
+    }
+    return nullptr;
+}
+
 
 bool TitleAreaContent::removeAreaContent(AreaContent* content)
 {
@@ -254,6 +256,15 @@ ListAreaContent::ListAreaContent(const ListAreaContent& cp)
         list_data[i].list_format = cp.list_data[i].list_format;
     }
     list_template_format = cp.list_template_format;
+}
+
+void ListAreaContent::AppendListItem(const QString& text, const ListFormat& list_format, const TextFormat& text_format)
+{
+    ListContent list_content;
+    list_content.text_content.text_data = text;
+    list_content.text_content.text_format = text_format;
+    list_content.list_format = list_format;
+    list_data.push_back(list_content);
 }
 
 ImageAreaContent::ImageAreaContent(const ImageAreaContent& cp)

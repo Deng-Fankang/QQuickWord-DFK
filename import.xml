@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="gb2312"?>
+<Doc desc="软件研制任务书" doc_id="RJYZRWS">
+	<!--1-->
+	<TitleIndicator name="范围">
+		<TitleIndicator name="标识">
+			<TemplateIndicator>
+				<Format>
+					<TextTemplate></TextTemplate>
+				</Format>
+			</TemplateIndicator>
+		</TitleIndicator>
+		<TitleIndicator name="系统概述">
+			<TemplateIndicator>
+				<Format>
+					<TextTemplate></TextTemplate>
+				</Format>
+			</TemplateIndicator>
+		</TitleIndicator>
+		<TitleIndicator name="文档概述">
+			<TemplateIndicator>
+				<Format>
+					<TextTemplate></TextTemplate>
+				</Format>
+			</TemplateIndicator>
+		</TitleIndicator>
+	</TitleIndicator>
+	<!--2-->
+	<TitleIndicator name="引用文档">
+		<TemplateIndicator>
+			<Format>
+				<TableTemplate count="1"></TableTemplate>
+			</Format>
+		</TemplateIndicator>
+	</TitleIndicator>
+	<!--3-->
+	<TitleIndicator name="运行环境要求">
+		<TitleIndicator name="硬件环境">
+			<TitleIndicator name="目标机硬件环境">
+				<TemplateIndicator>
+					<Format>
+						<TextTemplate></TextTemplate>
+					</Format>
+				</TemplateIndicator>
+			</TitleIndicator>
+			<TitleIndicator name="宿主机硬件环境">
+				<TemplateIndicator>
+					<Format>
+						<TextTemplate></TextTemplate>
+					</Format>
+				</TemplateIndicator>
+			</TitleIndicator>
+		</TitleIndicator>
+		<TitleIndicator name="软件环境">
+			<TitleIndicator name="目标机软件环境">
+				<TemplateIndicator>
+					<Format>
+						<TextTemplate></TextTemplate>
+					</Format>
+				</TemplateIndicator>
+			</TitleIndicator>
+			<TitleIndicator name="宿主机软件环境">
+				<TemplateIndicator>
+					<Format>
+						<TextTemplate></TextTemplate>
+					</Format>
+				</TemplateIndicator>
+			</TitleIndicator>
+		</TitleIndicator>
+	</TitleIndicator>
+	<!--4-->
+	<TitleIndicator name="技术要求">
+		<TitleIndicator name="功能">
+			<MutiTemplateIndicator stop_title="软件工作模式">
+				<Format>
+					<TitleTemplate>
+						<TextTemplate match_title="1"></TextTemplate>
+					</TitleTemplate>
+				</Format>
+			</MutiTemplateIndicator>			
+			<TitleIndicator name="软件工作模式">
+				<TemplateIndicator>
+					<Format>
+						<TextTemplate></TextTemplate>
+					</Format>
+				</TemplateIndicator>
+				<TitleIndicator name="软件任务剖面图">
+					<TemplateIndicator>
+						<Format>
+							<ImageTemplate count="2"></ImageTemplate>
+							<TextTemplate></TextTemplate>
+						</Format>
+					</TemplateIndicator>
+				</TitleIndicator>
+				<MutiTemplateIndicator>
+					<Format>
+						<TitleTemplate>
+							<TextTemplate></TextTemplate>
+						</TitleTemplate>
+					</Format>
+				</MutiTemplateIndicator>
+			</TitleIndicator>
+		</TitleIndicator>
+	</TitleIndicator>
+</Doc>

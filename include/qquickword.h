@@ -28,6 +28,7 @@ public:
     void ImportFiles();
     void ExportFiles();
     void ClearFiles();
+    void MatchFiles();
 
 public:
     Ui::QQuickWordClass ui;
