@@ -42,20 +42,27 @@ namespace WordExport {
 		ui.setupUi(this);
 		root = new TreeItem();
 		root->item_data = new TitleItemData(root, new TitleAreaContent());
-		root_edit_able = new TreeItem();
-		TitleAreaContent* root_title_node = new TitleAreaContent(QString::fromLocal8Bit("根节点"));
-		root_edit_able->user_data[Qt::DisplayRole] = root_title_node->title;
-		root_edit_able->user_data[Qt::EditRole] = root_title_node->title;
-		//root_edit_able->user_data[Qt::UserRole] = TITLE_CONTENT;
-		//root_edit_able->user_data[Qt::TitleContentRole] = QVariant::fromValue((void*)root_title_node);
-		root_edit_able->item_data = new TitleItemData(root_edit_able, root_title_node);
+		//root_edit_able = new TreeItem();
+		//TitleAreaContent* root_title_node = new TitleAreaContent(QString::fromLocal8Bit("根节点"));
+		//root_edit_able->user_data[Qt::DisplayRole] = root_title_node->title;
+		//root_edit_able->user_data[Qt::EditRole] = root_title_node->title;
+		////root_edit_able->user_data[Qt::UserRole] = TITLE_CONTENT;
+		////root_edit_able->user_data[Qt::TitleContentRole] = QVariant::fromValue((void*)root_title_node);
+		//root_edit_able->item_data = new TitleItemData(root_edit_able, root_title_node);
 
-		root_edit_able->SetParent(root);
+		//root_edit_able->SetParent(root);
 		//root->children.push_back(root_edit_able);
 		//TestConstructTree(root_edit_able);
 		SetWidget();
 		setFrameStyle(QFrame::WinPanel);
 		setFrameShadow(QFrame::Sunken);
+	}
+
+	void WordExportWidget::SetTitleAreaContent(TitleAreaContent* title_area)
+	{
+		TreeItem* root_edit = GetTitleTreeFromAreaContent(title_area);
+		root_edit->SetParent(root, -1, false);
+		title_tree_model->updateData(root);
 	}
 
 	WordExportWidget::~WordExportWidget()

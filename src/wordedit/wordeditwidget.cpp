@@ -174,11 +174,12 @@ namespace WordEdit {
 		block_format.setAlignment(Qt::AlignHCenter);
 		cursor.mergeBlockFormat(block_format);
 
-		int ori_width = content->image.width();
-		int ori_height = content->image.height();
-		QImage insert_img = content->image.scaled(min(ori_width, IMAGE_MAX_WIDTH), ori_height, Qt::KeepAspectRatio);
+		QImage img = QImage(content->image_path);
+		int ori_width = img.width();
+		int ori_height = img.height();
+		QImage insert_img = img.scaled(min(ori_width, IMAGE_MAX_WIDTH), ori_height, Qt::KeepAspectRatio);
 		min_width = qMax(min_width, static_cast<int>(ceil(insert_img.width() + 2 * text_edit->document()->indentWidth())));
-		cursor.insertImage(insert_img, content->image_format.file_name);
+		cursor.insertImage(insert_img, content->image_path);
 		text_edit->setMinimumWidth(min_width);
 	}
 }

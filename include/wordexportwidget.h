@@ -13,6 +13,8 @@ namespace WordExport {
 
 	public:
 		WordExportWidget(QWidget* parent = nullptr);
+
+		void SetTitleAreaContent(TitleAreaContent* title_area);
 		~WordExportWidget();
 
 	private:

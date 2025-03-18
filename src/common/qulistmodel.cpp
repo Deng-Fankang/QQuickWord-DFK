@@ -14,6 +14,16 @@ QVariant QUListModel::data(const QModelIndex& index, int role) const
 	return QVariant();
 }
 
+bool QUListModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+	if (index.isValid())
+	{
+		user_data[index.row()][role] = value;
+		return true;
+	}
+	return false;
+}
+
 int QUListModel::rowCount(const QModelIndex& parent) const
 {
 	return this->user_data.size();

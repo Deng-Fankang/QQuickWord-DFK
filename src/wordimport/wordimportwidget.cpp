@@ -5,7 +5,7 @@
 #include "module_manager.h"
 #include "importwidgetdelegate.h"
 
-#include "qlistview.h"
+#include "importview.h"
 #include "qtreeview.h"
 #include "qsplitter.h"
 #include "qfile.h"
@@ -36,7 +36,7 @@ namespace WordImport {
 		list_model = new QUListModel();
 		tree_model = new ImportTreeModel();
 		FileItemDelegate* file_delegate = new FileItemDelegate();
-		file_list_view = new QListView(this);
+		file_list_view = new FileListView(this);
 		file_list_view->setModel(list_model);
 		file_list_view->setItemDelegate(file_delegate);
 		connect(file_list_view->selectionModel(), &QItemSelectionModel::currentChanged, this, &WordImportWidget::OnSelectFile);

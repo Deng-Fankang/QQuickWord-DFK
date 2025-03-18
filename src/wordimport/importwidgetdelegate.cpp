@@ -51,7 +51,7 @@ void FileItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
         option.rect.bottomRight() - QPoint(total_line_width, total_line_width));
     vopt.text = index.data(Qt::DisplayRole).toString();
     vopt.features |= QStyleOptionViewItem::HasCheckIndicator;
-    vopt.checkState = Qt::Checked;
+    vopt.checkState = Qt::CheckState(index.data(Qt::CheckStateRole).toInt());
     vopt.palette.setColor(QPalette::Highlight, QColor(0,255,255));
     vopt.palette.setColor(QPalette::HighlightedText, QColor(255, 0, 0));
 

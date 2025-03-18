@@ -1,5 +1,6 @@
 #pragma once
 #include "templateformat.h"
+
 class WordTemplate;
 class NotLeafIndicator;
 
@@ -24,10 +25,11 @@ public:
 	void SetAttributes(const QMap<QString, QString>& attributes_) { attributes = attributes_; }
 
 	virtual void ClearMatchContent() = 0;
+	virtual void ClearInstallContent() = 0;
 	virtual IndicatorType GetIndicatorType() = 0;
 	virtual IndicatorLabel GetIndicatorLabel() = 0;
 	virtual bool IterMatchAndSetContents(const TitleAreaContent* parent_area, int& start_child_idx) = 0;
-
+	virtual bool IterInstallContents() = 0;
 protected:
 	//WordTemplate* owner;
 	NotLeafIndicator* parent;
@@ -42,6 +44,8 @@ public:
 	NotLeafIndicator(NotLeafIndicator* parent_ = nullptr);
 	virtual IndicatorType GetIndicatorType() override { return Indicator::IndicatorType::Not_Leaf_Indicator; }
 	const QVector<Indicator*>& GetIndicatorChildren() const { return indicator_children; }
+	Indicator* GetIndicator(const QVector<int>& indicator_ids);
+	bool IterInstallContents();
 protected:
 	QVector<Indicator*> indicator_children;
 };
@@ -55,12 +59,17 @@ public:
 	{
 		QString doc_id;
 		QVector<int> indicators;
+		struct Rule
+		{
+			QVector<int> src_tmp;
+			QVector<int> dst_tmp;
+		};
+		QVector<Rule> rules;
 	};
 	LeafIndicator(NotLeafIndicator* parent_ = nullptr);
 	virtual IndicatorType GetIndicatorType() override { return Indicator::IndicatorType::Leaf_Indicator; }
 
 protected:
-	QVector<InstallSource> install_sources;
 	TemplateFormatCollection tformat_col;
 };
 
@@ -76,6 +85,8 @@ public:
 	IndicatorLabel GetIndicatorLabel() { return IndicatorLabel::Doc_Label; }
 	bool IterMatchAndSetContents(const TitleAreaContent* parent_area, int& start_child_idx);
 	void ClearMatchContent();
+	void ClearInstallContent();
+	TitleAreaContent* ContructTitleAreaContent(WordTemplateMode mode);
 public:
 	XmlIProperty xml_iproperty;
 };
@@ -88,8 +99,9 @@ public:
 	TitleIndicator(NotLeafIndicator* parent_ = nullptr);
 	IndicatorLabel GetIndicatorLabel() { return IndicatorLabel::Title_Label; }
 	void ClearMatchContent();
+	void ClearInstallContent();
 	bool IterMatchAndSetContents(const TitleAreaContent* parent_area, int& start_child_idx);
-
+	TitleAreaContent* ContructTitleAreaContent(TitleAreaContent* parent_area, WordTemplateMode mode);
 public:
 
 };
@@ -98,31 +110,44 @@ public:
 class TemplateIndicator : public LeafIndicator
 {
 	friend class WordTemplate;
+	friend class DocIndicator;
+	friend class TitleIndicator;
 public:
 	TemplateIndicator(NotLeafIndicator* parent_= nullptr);
 	IndicatorLabel GetIndicatorLabel() override { return Indicator::IndicatorLabel::Template_Label; }
 
 	bool IterMatchAndSetContents(const TitleAreaContent* parent_area, int& start_child_idx);
+	const TemplateFormatObjCollection& GetMatchContent() { return tobj_col_match; }
+
+	bool IterInstallContents();
 
 	void ClearMatchContent();
-	
+	void ClearInstallContent();
 private:
 
 private:
-	TemplateFormatObjCollection tobj_col;
+	InstallSource install_source;
+	TemplateFormatObjCollection tobj_col_match;
+	TemplateFormatObjCollection tobj_col_install;
 };
 
 
 class MultiTemplateIndicator : public LeafIndicator
 {
+	friend class WordTemplate;
+	friend class DocIndicator;
+	friend class TitleIndicator;
 public:
 	MultiTemplateIndicator(NotLeafIndicator* parent_ = nullptr);
 	IndicatorLabel GetIndicatorLabel() override { return Indicator::IndicatorLabel::MultiTemplate_Label; }
 
 	bool IterMatchAndSetContents(const TitleAreaContent* parent_area, int& start_child_idx);
+	bool IterInstallContents();
 
 	void ClearMatchContent();
-
+	void ClearInstallContent();
 private:
-	QVector<TemplateFormatObjCollection> tobj_col_vec;
+	QVector<InstallSource> install_sources;
+	QVector<TemplateFormatObjCollection> tobj_col_match_vec;
+	QVector<TemplateFormatObjCollection> tobj_col_install_vec;
 };

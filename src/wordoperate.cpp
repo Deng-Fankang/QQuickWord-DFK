@@ -492,14 +492,15 @@ void AppendContents(TitleAreaContent* node, QAxObject* doc, int start, int end)
                     for (int title_index : node->GetIndexFromRoot()) {
                         title_index_list << QString::number(title_index);
                     }
-                    image_format.file_name = QString("config/wordimage/%1-%2.png").arg(title_index_list.join('.'), QString::number(area_pos_vector[idx].idx));
-                    
-                    image_format.file_name = QDir::cleanPath(QDir::currentPath() + QDir::separator() + image_format.file_name);
 
+                    QString img_path = QString("config/wordimage/%1-%2.png").arg(title_index_list.join('.'), QString::number(area_pos_vector[idx].idx));
+                    
+                    img_path = QDir::cleanPath(QDir::currentPath() + QDir::separator() + img_path);
+                    image_board.save(img_path);
                     QAxObject* image_range = image->querySubObject("Range");
                     image_format.alignment = image_range->querySubObject("ParagraphFormat")->property("Alignment").toInt();
-                    node->AppendImageAreaContent(image_board, image_format);
-                    image_board.save(image_format.file_name);
+                    node->AppendImageAreaContent(img_path, image_format);
+                    
                     //qDebug() << "aliment:" << image->querySubObject("HorizontalLineFormat")->property("Alignment");
 
                 }
@@ -564,7 +565,6 @@ TitleAreaContent* WordReadOperate::CreateWordNode()
                 list_template_format.list_levels[st.level - 1].text_font = format_list[0].font;
                 TitleAreaContent* title_area = static_cast<TitleAreaContent*>(top_title->AppendTitleAreaContent(title, format_list[0]));
                 title_area->list_template_format = list_template_format;
-                title_area->list_format = list_format;
                 title_stack.push(title_area);
             }
             else
@@ -582,7 +582,6 @@ TitleAreaContent* WordReadOperate::CreateWordNode()
                 list_template_format.list_levels[st.level - 1].text_font = format_list[0].font;
                 TitleAreaContent* title_area = static_cast<TitleAreaContent*>(top_title->GetParent()->AppendTitleAreaContent(title, format_list[0]));
                 title_area->list_template_format = list_template_format;
-                title_area->list_format = list_format;
                 title_stack.push_back(title_area);
             }
         }
@@ -715,7 +714,7 @@ void WordWriteOperate::DoWriteToWord(TitleAreaContent* root, QAxObject* selectio
 
             QAxObject* inlineShapes = selection->querySubObject("InlineShapes");
             QAxObject* shape = inlineShapes->querySubObject(
-                "AddPicture(const QString&)", image_area->image_format.file_name);
+                "AddPicture(const QString&)", image_area->image_path);
             shape->setProperty("Height", image_area->image_format.height);
             shape->setProperty("Width", image_area->image_format.width);
             shape->setProperty("ScaleHeight", image_area->image_format.scale_height);

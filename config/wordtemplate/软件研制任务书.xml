@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="gb2312"?>
-<Doc desc="软件研制任务书" doc_id="RJYZRWS">
+<Doc name="软件研制任务书" doc_id="RJYZRWS">
 	<!--1-->
 	<TitleIndicator name="范围">
 		<TitleIndicator name="标识">
 			<TemplateIndicator>
 				<Format>
 					<TextTemplate></TextTemplate>
+					<ListTemplate></ListTemplate>
 				</Format>
 			</TemplateIndicator>
 		</TitleIndicator>

@@ -31,4 +31,12 @@ namespace WordExport {
 	{
 		cout << "wordexport stop" << endl;
 	}
+	void Module::SetTitleAreaContent(TitleAreaContent* title_area)
+	{
+		if (title_area == nullptr)
+		{
+			return;
+		}
+		dynamic_cast<WordExportWidget*>(w)->SetTitleAreaContent(title_area);
+	}
 }

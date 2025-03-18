@@ -2,6 +2,7 @@
 #include "basemodule.h"
 #include "singleton.h"
 
+class TitleAreaContent;
 namespace WordExport {
 
 	class Module: public BaseModule, public Singleton<Module>
@@ -13,6 +14,7 @@ namespace WordExport {
 		void Start();
 		void Stop();
 
+		void SetTitleAreaContent(TitleAreaContent* title_area);
 		//TreeItem* GetExport
 
 	public:

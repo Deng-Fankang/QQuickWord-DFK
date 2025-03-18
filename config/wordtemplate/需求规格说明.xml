@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="gb2312"?>
-<Doc desc="éœ€æ±‚è§„æ ¼è¯´æ˜Ž" id="XQGGSM">
-	<TitleIndicator content="èŒƒå›´">
-		<TitleIndicator content="æ ‡è¯†">
+<Doc name="ÐèÇó¹æ¸ñËµÃ÷" doc_id="XQGGSM">
+	<TitleIndicator name="·¶Î§">
+		<TitleIndicator name="±êÊ¶">
 			<TemplateIndicator>
 				<Srcs>
 					<Src>
 						<DocId>RJYZRWS</DocId>
 						<IndicatorId>1.1.1</IndicatorId>
+						<Rules>
+							<Rule src_tmp="1" dst_tmp="1"></Rule>
+						</Rules>
 					</Src>
 				</Srcs>
 				<Format>
@@ -14,12 +17,15 @@
 				</Format>
 			</TemplateIndicator>
 		</TitleIndicator>
-		<TitleIndicator content="ç³»ç»Ÿæ¦‚è¿°">
+		<TitleIndicator name="ÏµÍ³¸ÅÊö">
 			<TemplateIndicator>
 				<Srcs>
 					<Src>
 						<DocId>RJYZRWS</DocId>
 						<IndicatorId>1.2.1</IndicatorId>
+						<Rules>
+							<Rule src_tmp="1" dst_tmp="1"></Rule>
+						</Rules>
 					</Src>
 				</Srcs>
 				<Format>
@@ -27,12 +33,15 @@
 				</Format>
 			</TemplateIndicator>
 		</TitleIndicator>
-		<TitleIndicator content="æ–‡æ¡£æ¦‚è¿°">
+		<TitleIndicator name="ÎÄµµ¸ÅÊö">
 			<TemplateIndicator>
 				<Srcs>
 					<Src>
 						<DocId>RJYZRWS</DocId>
 						<IndicatorId>1.3.1</IndicatorId>
+						<Rules>
+							<Rule src_tmp="1" dst_tmp="1"></Rule>
+						</Rules>
 					</Src>
 				</Srcs>
 				<Format>
@@ -41,26 +50,33 @@
 			</TemplateIndicator>
 		</TitleIndicator>
 	</TitleIndicator>
-	<TitleIndicator content="å¼•ç”¨æ–‡æ¡£">
+	<TitleIndicator name="ÒýÓÃÎÄµµ">
 		<TemplateIndicator>
 			<Srcs>
 				<Src>
 					<DocId>RJYZRWS</DocId>
 					<IndicatorId>2.1</IndicatorId>
+					<Rules>
+						<Rule src_tmp="1" dst_tmp="1"></Rule>
+					</Rules>
 				</Src>
 			</Srcs>
 			<Format>
-				<ListTemplate></ListTemplate>
+				<TableTemplate count="1"></TableTemplate>
 			</Format>
 		</TemplateIndicator>
 	</TitleIndicator>
-	<TitleIndicator content="éœ€æ±‚">
-		<TitleIndicator content="è¦æ±‚çš„çŠ¶æ€å’Œæ–¹å¼">
-			<MutiTemplateIndicator>
+	<TitleIndicator name="ÐèÇó">
+		<TitleIndicator name="ÒªÇóµÄ×´Ì¬ºÍ·½Ê½">
+			<MutiTemplateIndicator stop_title="CSCIÄÜÁ¦ÐèÇó">
 				<Srcs>
 					<Src>
 						<DocId>RJYZRWS</DocId>
 						<IndicatorId>4.1.2.3</IndicatorId>
+						<Rules>
+							<Rule src_tmp="1" dst_tmp="1"></Rule>
+							<Rule src_tmp="1.1" dst_tmp="1.1"></Rule>
+						</Rules>
 					</Src>
 				</Srcs>
 				<Format>
@@ -70,17 +86,20 @@
 				</Format>
 			</MutiTemplateIndicator>
 		</TitleIndicator>
-		<TitleIndicator content="CSCIèƒ½åŠ›éœ€æ±‚">
-			<TitleIndicator content="è½¯ä»¶åŠŸèƒ½å‰–é¢">
+		<TitleIndicator name="CSCIÄÜÁ¦ÐèÇó">
+			<TitleIndicator name="Èí¼þ¹¦ÄÜÆÊÃæ">
 				<TemplateIndicator>
 					<Srcs>
 						<Src>
 							<DocId>RJYZRWS</DocId>
 							<IndicatorId>4.1.2.2.1</IndicatorId>
+							<Rules>
+								<Rule src_tmp="1" dst_tmp="1"></Rule>
+							</Rules>
 						</Src>
 					</Srcs>
 					<Format>
-						<ImageTemplate></ImageTemplate>
+						<ImageTemplate count="2"></ImageTemplate>
 					</Format>
 				</TemplateIndicator>
 			</TitleIndicator>
@@ -89,32 +108,35 @@
 					<Src>
 						<DocId>RJYZRWS</DocId>
 						<IndicatorId>4.1.1</IndicatorId>
+						<Rules>
+							<Rule src_tmp="1" dst_tmp="1"></Rule>
+							<Rule src_tmp="1.1" dst_tmp="1.1.1"></Rule>
+						</Rules>
 					</Src>
 				</Srcs>
 				<Format>
 					<TitleTemplate>
-						<TitleTemplate content="èƒ½åŠ›æè¿°">
+						<TitleTemplate name="ÄÜÁ¦ÃèÊö">
 							<TextTemplate></TextTemplate>
 						</TitleTemplate>
-						<TitleTemplate content="è¾“å…¥">
-							<TextTemplate></TextTemplate>
+						<TitleTemplate name="ÊäÈë">
+							<TextTemplate>ÊäÈë²ÎÊý¼û±íX¡£</TextTemplate>
 						</TitleTemplate>
-						<TitleTemplate content="å¤„ç†è¿‡ç¨‹">
-							<TextTemplate></TextTemplate>
+						<TitleTemplate name="´¦Àí¹ý³Ì">
+							<TextTemplate>´¦Àí¹ý³ÌÈçÏÂ</TextTemplate>
 						</TitleTemplate>
-						<TitleTemplate content="å¼‚å¸¸æƒ…å†µå¤„ç†è¦æ±‚">
-							<TextTemplate></TextTemplate>
+						<TitleTemplate name="Òì³£Çé¿ö´¦ÀíÒªÇó">
+							<TextTemplate>±¾ÌõÎÞÄÚÈÝ¡£</TextTemplate>
 						</TitleTemplate>
-						<TitleTemplate content="è¾“å‡º">
-							<TextTemplate></TextTemplate>
+						<TitleTemplate name="Êä³ö">
+							<TextTemplate>Êä³ö²ÎÊý¼û±íX¡£</TextTemplate>
 						</TitleTemplate>
-						<TitleTemplate content="æ»¡è¶³çš„å„é¡¹éœ€æ±‚åŠæ€§èƒ½">
-							<TextTemplate></TextTemplate>
+						<TitleTemplate name="Âú×ãµÄ¸÷ÏîÐèÇó¼°ÐÔÄÜ">
+							<TextTemplate>±¾ÌõÎÞÄÚÈÝ¡£</TextTemplate>
 						</TitleTemplate>
 					</TitleTemplate>
 				</Format>
 			</MutiTemplateIndicator>
 		</TitleIndicator>
-
 	</TitleIndicator>
 </Doc>

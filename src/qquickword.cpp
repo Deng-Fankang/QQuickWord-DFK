@@ -79,9 +79,29 @@ void Test(TitleAreaContent* root) {
 
 void QQuickWord::ExportFiles()
 {
-    WordWriteOperate wwrite("D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test_write_2.docx");
+  /*  WordWriteOperate wwrite("D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test_write_2.docx");
     const vector<ImportFileData>& files_data = ImportFilesMgr::Instance().GetFilesData();
-    wwrite.WriteToWord(files_data[0].root);
+    wwrite.WriteToWord(files_data[0].root);*/
+
+    //WordTemplate* word_template = WordTemplateMgr::Instance().GetWordTemplate("RJYZRWS");
+    //if (word_template)
+    //{
+    //    TitleAreaContent* title_area = word_template->ContructTitleAreaContent(WordTemplateMode::Match_Mode);
+    //    WordExport::Module::InstancePtr()->SetTitleAreaContent(title_area);
+    //}
+
+    WordTemplate* word_template = WordTemplateMgr::Instance().GetWordTemplate("XQGGSM");
+    if (word_template)
+    {
+        word_template->TryInstallContent();
+        TitleAreaContent* title_area = word_template->ContructTitleAreaContent(WordTemplateMode::Install_Mode);
+        TitleAreaContent::RecurNumberTitleArea(title_area);
+        TitleAreaContent::RecurSetConfigFormat(title_area);
+        WordExport::Module::InstancePtr()->SetTitleAreaContent(title_area);
+
+        WordWriteOperate wwrite("D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test_write_3.docx");
+        wwrite.WriteToWord(title_area);
+    }
 }
 
 void QQuickWord::ClearFiles()
@@ -90,12 +110,10 @@ void QQuickWord::ClearFiles()
 
 void QQuickWord::MatchFiles()
 {
-    
     const vector<ImportFileData> & files_data = ImportFilesMgr::Instance().GetFilesData();
     if (files_data.size() > 0)
     {
         WordTemplate* word_template = WordTemplateMgr::Instance().GetWordTemplate("RJYZRWS");
         bool ret = word_template->TryMatchAreaContent(files_data[0].root);
     }
-
 }

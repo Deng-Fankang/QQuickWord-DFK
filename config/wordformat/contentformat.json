@@ -1,0 +1,267 @@
+{
+  "text_format": {
+    "font": {
+      "font_bold": 0,
+      "font_italic": 0,
+      "font_size": 12,
+      "font_spacing": 0,
+      "font_number_spacing": 0,
+      "font_color": -16777216,
+      "font_name": "宋体",
+      "font_name_fareast": "宋体",
+      "font_name_ascii": "宋体"
+    },
+    "paraformat": {
+      "line_spacing": 12.0,
+      "line_spacing_rule": 0,
+      "line_unit_after": 0,
+      "line_unit_before": 0,
+      "first_line_indent": 0,
+      "left_indent": 21,
+      "right_indent": 0,
+      "spacing_after": 0,
+      "spacing_before": 0,
+      "spacing_after_auto": 0,
+      "spacing_before_auto": 0,
+      "alignment": 3
+    },
+    "style_name": "正文"
+  },
+  "list_format": {
+    "font": {
+      "font_bold": 0,
+      "font_italic": 0,
+      "font_size": 12,
+      "font_spacing": 0,
+      "font_number_spacing": 0,
+      "font_color": -16777216,
+      "font_name": "宋体",
+      "font_name_fareast": "宋体",
+      "font_name_ascii": "宋体"
+    },
+    "paraformat": {
+      "line_spacing": 12.0,
+      "line_spacing_rule": 0,
+      "line_unit_after": 0,
+      "line_unit_before": 0,
+      "first_line_indent": 0,
+      "left_indent": 21,
+      "right_indent": 0,
+      "spacing_after": 0,
+      "spacing_before": 0,
+      "spacing_after_auto": 0,
+      "spacing_before_auto": 0,
+      "alignment": 3
+    },
+    "style_name": "正文",
+    "list_type": 3,
+    "template_id": 1,
+    "list_levels": [
+      {
+        "linked_style": "",
+        "number_format": "%1.",
+        "number_pos": 21,
+        "number_style": 0,
+        "text_pos": 43,
+        "index": 1,
+        "reset_on_higher": 0,
+        "start_at": 1,
+        "tab_pos": 9999999,
+        "trailing_character": 0
+      }
+    ]
+  },
+  "table_format": {
+    "font": {
+      "font_bold": 0,
+      "font_italic": 0,
+      "font_size": 12,
+      "font_spacing": 0,
+      "font_number_spacing": 0,
+      "font_color": -16777216,
+      "font_name": "宋体",
+      "font_name_fareast": "宋体",
+      "font_name_ascii": "宋体"
+    },
+    "paraformat": {
+      "line_spacing": 12.0,
+      "line_spacing_rule": 0,
+      "line_unit_after": 0,
+      "line_unit_before": 0,
+      "first_line_indent": 0,
+      "left_indent": 21,
+      "right_indent": 0,
+      "spacing_after": 0,
+      "spacing_before": 0,
+      "spacing_after_auto": 0,
+      "spacing_before_auto": 0,
+      "alignment": 3
+    },
+    "style_name": "正文",
+    "table": {
+      "allow_auto_fit": true,
+      "allow_page_break": true,
+      "apply_style_first_col": true,
+      "apply_style_last_col": false,
+      "apply_style_heading": true,
+      "apply_style_last_row": false,
+      "table_direction": 1,
+      "auto_format_type": 1,
+      "spacing": 0,
+      "top_padding": 0,
+      "bottom_padding": 0,
+      "left_padding": 5.4,
+      "right_padding": 5.4,
+      "left_indent": 0,
+      "alignment": 0,
+      "borders_format": {
+        "distance_from": 157,
+        "distance_from_bottom": 0,
+        "distance_from_left": 0,
+        "distance_from_right": 0,
+        "distance_from_top": 0,
+        "enable": true,
+        "inside_line_style": 1,
+        "inside_line_width": 4,
+        "join_borders": true,
+        "outside_line_style": 1,
+        "outside_line_width": 157,
+        "border_format": [
+          {
+            "color": -16777216,
+            "line_style": 0,
+            "line_width": 6,
+            "visible": false
+          },
+          {
+            "color": -16777216,
+            "line_style": 0,
+            "line_width": 6,
+            "visible": false
+          },
+          {
+            "color": -16777216,
+            "line_style": 0,
+            "line_width": 6,
+            "visible": true
+          },
+          {
+            "color": -16777216,
+            "line_style": 1,
+            "line_width": 4,
+            "visible": true
+          },
+          {
+            "color": -16777216,
+            "line_style": 1,
+            "line_width": 4,
+            "visible": true
+          },
+          {
+            "color": -16777216,
+            "line_style": 1,
+            "line_width": 4,
+            "visible": true
+          },
+          {
+            "color": -16777216,
+            "line_style": 1,
+            "line_width": 4,
+            "visible": true
+          },
+          {
+            "color": -16777216,
+            "line_style": 1,
+            "line_width": 4,
+            "visible": true
+          }
+        ]
+      },
+      "style_name": "普通表格"
+    },
+    "cell": {
+      "height": 9999999,
+      "width": 98.25,
+      "height_rule": 0,
+      "prefer_width": 106.5,
+      "prefer_width_type": 3,
+      "top_padding": 0,
+      "bottom_padding": 0,
+      "left_padding": 5.4,
+      "right_padding": 5.4,
+      "ver_alignment": 0,
+      "word_wrap": true,
+      "fit_text": false,
+      "borders_format": {
+        "distance_from": 0,
+        "distance_from_bottom": 0,
+        "distance_from_left": 0,
+        "distance_from_right": 0,
+        "distance_from_top": 0,
+        "enable": true,
+        "inside_line_style": 0,
+        "inside_line_width": 0,
+        "join_borders": false,
+        "outside_line_style": 1,
+        "outside_line_width": 420,
+        "border_format": [
+          {
+            "color": 0,
+            "line_style": 0,
+            "line_width": 6,
+            "visible": false
+          },
+          {
+            "color": 0,
+            "line_style": 0,
+            "line_width": 6,
+            "visible": false
+          },
+          {
+            "color": 0,
+            "line_style": 0,
+            "line_width": 6,
+            "visible": false
+          },
+          {
+            "color": 0,
+            "line_style": 0,
+            "line_width": 6,
+            "visible": true
+          },
+          {
+            "color": 0,
+            "line_style": 1,
+            "line_width": 4,
+            "visible": true
+          },
+          {
+            "color": 0,
+            "line_style": 1,
+            "line_width": 4,
+            "visible": true
+          },
+          {
+            "color": 0,
+            "line_style": 1,
+            "line_width": 4,
+            "visible": true
+          },
+          {
+            "color": 0,
+            "line_style": 1,
+            "line_width": 4,
+            "visible": true
+          }
+        ]
+      }
+    }
+  },
+  "image_format": {
+    "height": 120,
+    "width": 415,
+    "alignment": 1,
+    "scale_height": 50,
+    "scale_width": 50
+  }
+}

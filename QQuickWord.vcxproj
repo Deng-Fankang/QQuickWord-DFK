@@ -131,6 +131,7 @@
     <ClCompile Include="src\sharemgr.cpp" />
     <ClCompile Include="src\templateformat.cpp" />
     <ClCompile Include="src\timertest.cpp" />
+    <ClCompile Include="src\wordconfig.cpp" />
     <ClCompile Include="src\worddefine.cpp" />
     <ClCompile Include="src\wordedit\wordedit.cpp" />
     <ClCompile Include="src\wordedit\wordeditwidget.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="src\wordexport\wordexportmodel.cpp" />
     <ClCompile Include="src\wordexport\wordexportwidget.cpp" />
     <ClCompile Include="src\wordexport\wordexport.cpp" />
+    <ClCompile Include="src\wordimport\importview.cpp" />
     <ClCompile Include="src\wordimport\importwidgetdelegate.cpp" />
     <ClCompile Include="src\wordimport\wordimport.cpp" />
     <ClCompile Include="src\wordimport\wordimportmodel.cpp" />
@@ -156,11 +158,13 @@
     <ClInclude Include="include\exportdelegate.h" />
     <ClInclude Include="include\exportview.h" />
     <ClInclude Include="include\global.h" />
+    <QtMoc Include="include\importview.h" />
     <ClInclude Include="include\importwidgetdelegate.h" />
     <ClInclude Include="include\indicator.h" />
     <ClInclude Include="include\sharefunc.h" />
     <ClInclude Include="include\templateformat.h" />
     <ClInclude Include="include\timertest.h" />
+    <ClInclude Include="include\wordconfig.h" />
     <ClInclude Include="include\worddefine.h" />
     <ClInclude Include="include\wordexportmodel.h" />
     <ClInclude Include="include\wordimportmodel.h" />
@@ -183,6 +187,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="config\qss\titletree.qss" />
+    <None Include="config\wordformat\contentformat.json" />
+    <None Include="config\wordformat\titleformat.json" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="config\image\branch-closed.png" />
@@ -202,4 +208,9 @@
   </ImportGroup>
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

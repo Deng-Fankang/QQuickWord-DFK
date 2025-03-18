@@ -51,6 +51,9 @@
     <Filter Include="config\image">
       <UniqueIdentifier>{f41bd9c4-6475-49aa-9540-6274a7a9af5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="config\wordformat">
+      <UniqueIdentifier>{87954c79-a43f-49d2-badd-c234f9a6b9ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="qquickword.qrc">
@@ -74,6 +77,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="include\sharemgr.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="include\importview.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -182,6 +188,12 @@
     <ClCompile Include="src\indicator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\wordconfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wordimport\importview.cpp">
+      <Filter>Source Files\module\WordImport</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\uic\ui_qquickword.h">
@@ -265,10 +277,19 @@
     <ClInclude Include="include\indicator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\wordconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config\qss\titletree.qss">
       <Filter>config\qss</Filter>
+    </None>
+    <None Include="config\wordformat\titleformat.json">
+      <Filter>config\wordformat</Filter>
+    </None>
+    <None Include="config\wordformat\contentformat.json">
+      <Filter>config\wordformat</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

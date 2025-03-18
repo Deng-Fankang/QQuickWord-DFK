@@ -10,6 +10,12 @@ extern const QVector<QString> HEADING_STYLE_NAME;
 extern const TextFormat DEFAULT_TEXT_AREA_FORMAT;
 extern const TextFormat DEFAULT_TITLE_AREA_FORMAT;
 
+enum class WordTemplateMode
+{
+	Match_Mode,
+	Install_Mode,
+};
+
 enum AreaType
 {
 	TEXT,
@@ -187,8 +193,9 @@ struct ListTemplateFormat
 {
 	QString template_name;
 	WdListType list_type;
+	int template_id;
 	bool outline_numberd;
-	struct
+	struct ListLevel
 	{
 		Font text_font;
 		QString linked_style;
@@ -305,7 +312,6 @@ struct TableFormat
 
 
 struct ImageFormat {
-	QString file_name;
 	float height;
 	float width;
 	int alignment;
@@ -319,7 +325,6 @@ struct ImageFormat {
 		{
 			return *this;
 		}
-		file_name = cp.file_name;
 		height = cp.height;
 		width = cp.width;
 		alignment = cp.alignment;
@@ -343,23 +348,27 @@ public:
 	AreaContent(TitleAreaContent* parent_area_ = nullptr)
 	{
 		parent_area = parent_area_;
+		is_set_format = false;
 	}
 	virtual AreaType GetAreaType() const = 0;
 
 	void setParent(TitleAreaContent* parent_area_) { parent_area = parent_area_; }
 	TitleAreaContent* GetParent() { return parent_area; }
+	bool IsSetFormat() { return is_set_format; }
 	virtual void PrintContent() = 0;
 
 	virtual ~AreaContent() { }
 protected:
 	TitleAreaContent* parent_area;
+	bool is_set_format;
 };
 
 class TextAreaContent :public AreaContent
 {
 public:
 
-	TextAreaContent(const QString& text = "", const TextFormat& f = DEFAULT_TEXT_AREA_FORMAT);
+	TextAreaContent(const QString& text, const TextFormat& f);
+	TextAreaContent(const QString& text="");
 	TextAreaContent(const TextAreaContent& cp);
 
 	AreaType GetAreaType() const {
@@ -405,6 +414,7 @@ public:
 	};
 
 	TableAreaContent(const QVector<QVector<CellAreaContent>>& data, const TableFormat& format, QString title = "");
+	TableAreaContent(const QVector<QVector<QString>>& data);
 	TableAreaContent(const TableAreaContent& cp);
 
 	AreaType GetAreaType() const {
@@ -456,11 +466,8 @@ class ImageAreaContent : public AreaContent
 {
 public:
 
-	ImageAreaContent(const QImage& img, const ImageFormat& image_format) {
-		image = img;
-		this->image_format = image_format;
-	};
-
+	ImageAreaContent(const QString& image_path, const ImageFormat& image_format);
+	ImageAreaContent(const QString& image_path);
 	ImageAreaContent(const ImageAreaContent& cp);
 
 	AreaType GetAreaType() const {
@@ -472,7 +479,7 @@ public:
 	}
 
 public:
-	QImage image;
+	QString image_path;
 	ImageFormat image_format;
 };
 
@@ -481,6 +488,7 @@ class TitleAreaContent :public AreaContent
 public:
 
 	TitleAreaContent(const QString& title_ = "", TitleAreaContent* parent_area_=nullptr);
+	TitleAreaContent(const TitleAreaContent& cp);
 	~TitleAreaContent();
 	AreaType GetAreaType() const override
 	{
@@ -488,17 +496,17 @@ public:
 	}
 	void PrintContent() override;
 
-	AreaContent* AppendTextAreaContent(QString context, TextFormat f);
+	TextAreaContent* AppendTextAreaContent(QString context, TextFormat f);
 
-	AreaContent* AppendTableAreaContent(const QVector<QVector<TableAreaContent::CellAreaContent>>& data, const TableFormat& format, QString area_title = "");
+	TableAreaContent* AppendTableAreaContent(const QVector<QVector<TableAreaContent::CellAreaContent>>& data, const TableFormat& format, QString area_title = "");
 
-	AreaContent* AppendListAreaContent(const QString& text, const ListTemplateFormat& list_template_format, const ListFormat& list_format, const TextFormat& text_format);
+	ListAreaContent* AppendListAreaContent(const QString& text, const ListTemplateFormat& list_template_format, const ListFormat& list_format, const TextFormat& text_format);
 
 	void AppendListItem(const QString& text, const ListFormat& list_format, const TextFormat& text_format);
 
-	AreaContent* AppendImageAreaContent(const QImage& img, ImageFormat f);
+	ImageAreaContent* AppendImageAreaContent(const QString& img_path, ImageFormat f);
 
-	AreaContent* AppendTitleAreaContent(const QString& title, TextFormat format);
+	TitleAreaContent* AppendTitleAreaContent(const QString& title, TextFormat format);
 
 	void InsertAreaContent(AreaContent* content, int insert_idx = -1);
 
@@ -517,7 +525,9 @@ public:
 
 	int GetIndex();
 
-
+	static TitleAreaContent* CopyTitleContentArea(const TitleAreaContent* root, TitleAreaContent* parent=nullptr);
+	static void RecurNumberTitleArea(TitleAreaContent* title_area_content, QVector<int> index_from_root = {}, int level = 0);
+	static void RecurSetConfigFormat(TitleAreaContent* title_area_content);
 private:
 	QList<AreaContent*> content_list;
 	QList<TitleAreaContent*> child_title_list;
@@ -528,5 +538,4 @@ public:
 	QString title;
 	TextFormat title_format;
 	ListTemplateFormat list_template_format;
-	ListFormat list_format;
 };
