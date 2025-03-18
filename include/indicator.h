@@ -46,6 +46,9 @@ public:
 	const QVector<Indicator*>& GetIndicatorChildren() const { return indicator_children; }
 	Indicator* GetIndicator(const QVector<int>& indicator_ids);
 	bool IterInstallContents();
+
+	void ClearMatchContent();
+	void ClearInstallContent();
 protected:
 	QVector<Indicator*> indicator_children;
 };
@@ -84,8 +87,7 @@ public:
 
 	IndicatorLabel GetIndicatorLabel() { return IndicatorLabel::Doc_Label; }
 	bool IterMatchAndSetContents(const TitleAreaContent* parent_area, int& start_child_idx);
-	void ClearMatchContent();
-	void ClearInstallContent();
+	
 	TitleAreaContent* ContructTitleAreaContent(WordTemplateMode mode);
 public:
 	XmlIProperty xml_iproperty;
@@ -98,8 +100,8 @@ public:
 
 	TitleIndicator(NotLeafIndicator* parent_ = nullptr);
 	IndicatorLabel GetIndicatorLabel() { return IndicatorLabel::Title_Label; }
-	void ClearMatchContent();
-	void ClearInstallContent();
+	//void ClearMatchContent();
+	//void ClearInstallContent();
 	bool IterMatchAndSetContents(const TitleAreaContent* parent_area, int& start_child_idx);
 	TitleAreaContent* ContructTitleAreaContent(TitleAreaContent* parent_area, WordTemplateMode mode);
 public:

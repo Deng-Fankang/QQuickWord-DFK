@@ -1,7 +1,9 @@
 #include "exportview.h"
 #include "qevent.h"
+#include "qfiledialog.h"
 #include "wordexportmodel.h"
 #include "worddefine.h"
+#include "wordoperate.h"
 #include "qmenu.h"
 #include "qdebug.h"
 
@@ -50,15 +52,18 @@ void ExportTitleView::ShowMenuPop(const QPoint& pos)
 
 	QMenu* menu = new QMenu(this);
 	if (operate_index.parent().parent() == QModelIndex()) {
-		QAction* append_child_node = new QAction(QString::fromLocal8Bit("&添加子节点"), this);
+		QAction* append_child_node = new QAction(QString::fromLocal8Bit("&添加子节点"), menu);
+		QAction* export_node = new QAction(QString::fromLocal8Bit("&导出文档"), menu);
 		connect(append_child_node, &QAction::triggered, this, &ExportTitleView::SlotAppendChildItem);
+		connect(export_node, &QAction::triggered, this, &ExportTitleView::ExportTitleArea);
 		menu->addAction(append_child_node);
+		menu->addAction(export_node);
 	}
 	else
 	{
-		QAction* append_node = new QAction(QString::fromLocal8Bit("&添加同级标题"), this);
-		QAction* append_child_node = new QAction(QString::fromLocal8Bit("&添加子标题"), this);
-		QAction* delete_node = new QAction(QString::fromLocal8Bit("&删除标题"), this);
+		QAction* append_node = new QAction(QString::fromLocal8Bit("&添加同级标题"), menu);
+		QAction* append_child_node = new QAction(QString::fromLocal8Bit("&添加子标题"), menu);
+		QAction* delete_node = new QAction(QString::fromLocal8Bit("&删除标题"), menu);
 		connect(append_node, &QAction::triggered, this, &ExportTitleView::SlotAppendItem);
 		connect(append_child_node, &QAction::triggered, this, &ExportTitleView::SlotAppendChildItem);
 		connect(delete_node, &QAction::triggered, this, &ExportTitleView::SlotDeleteItem);
@@ -99,6 +104,23 @@ void ExportTitleView::SlotAppendChildItem(bool checked)
 		TitleAreaContent* child_title = new TitleAreaContent(QString::fromLocal8Bit("新标题"));
 		model()->setData(operate_index.child(count, 0), QVariant::fromValue<void*>(child_title), Qt::TitleContentRole);
 
+	}
+}
+
+void ExportTitleView::ExportTitleArea(bool checked)
+{
+	if (operate_index.isValid() && operate_index.parent().parent() == QModelIndex())
+	{
+		TreeItem* tree_item = EXPORT_MODEL_PTR->TreeItemPtr(operate_index);
+		AreaContent* title_area = tree_item->item_data->GetAreaContent();
+		if (title_area->GetAreaType() == TITLE_AREA)
+		{
+			QString fileName = QFileDialog::getSaveFileName(this,
+				QString::fromLocal8Bit("导出文档"), "data",
+				QString::fromLocal8Bit("Word文档 (*.docx *.doc)"));
+			WordWriteOperate wwrite(fileName);
+			wwrite.WriteToWord(dynamic_cast<TitleAreaContent*>(title_area));
+		}
 	}
 }
 

@@ -68,7 +68,7 @@
 	</TitleIndicator>
 	<TitleIndicator name="需求">
 		<TitleIndicator name="要求的状态和方式">
-			<MutiTemplateIndicator stop_title="CSCI能力需求">
+			<MutiTemplateIndicator>
 				<Srcs>
 					<Src>
 						<DocId>RJYZRWS</DocId>
@@ -117,7 +117,7 @@
 				<Format>
 					<TitleTemplate>
 						<TitleTemplate name="能力描述">
-							<TextTemplate></TextTemplate>
+							<TextTemplate match_title="1"></TextTemplate>
 						</TitleTemplate>
 						<TitleTemplate name="输入">
 							<TextTemplate>输入参数见表X。</TextTemplate>

@@ -72,10 +72,7 @@ public:
         menuBar->addAction(menufile->menuAction());
         menuBar->addAction(menutmplate->menuAction());
         menufile->addAction(actionimport);
-        menufile->addAction(actionexport);
-        menufile->addAction(actionmatch);
         menufile->addAction(actionclear);
-        menutmplate->addAction(actionselect);
 
         retranslateUi(QQuickWordClass);
 

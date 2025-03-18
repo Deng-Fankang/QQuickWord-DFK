@@ -1,5 +1,6 @@
 #include "qquickword.h"
 #include "qsplitter.h"
+#include "qfiledialog.h"
 #include "module_manager.h"
 #include "sharemgr.h"
 #include "qdebug.h"
@@ -20,9 +21,19 @@ QQuickWord::QQuickWord(QWidget *parent)
     AddSubWidget(WORD_EXPORT_WIDGET, WordExport::Module::InstancePtr()->ShowWidget(ui.centralWidget));
 
     connect(ui.actionimport, &QAction::triggered, this, &QQuickWord::ImportFiles);
-    connect(ui.actionexport, &QAction::triggered, this, &QQuickWord::ExportFiles);
-    connect(ui.actionclear, &QAction::triggered, this, &QQuickWord::ClearFiles);
-    connect(ui.actionmatch, &QAction::triggered, this, &QQuickWord::MatchFiles);
+    //connect(ui.actionclear, &QAction::triggered, this, &QQuickWord::ClearFiles);
+
+    QMenu* install_menu = ui.menutmplate->addMenu(QString::fromLocal8Bit("&安装"));
+    QDir tmp_dir(WORD_TMP_PATH);
+    for (QString file : tmp_dir.entryList(QDir::Files))
+    {
+        QString doc_id = WordTemplateMgr::Instance().GetDocId(file);
+        QAction* action = new QAction(file.section('.', 0, 0), install_menu);
+        connect(action, &QAction::triggered, this, [this, doc_id](bool checked) {
+            this->InstallFile(doc_id);
+        });
+        install_menu->addAction(action);
+    }
 }
 
 QQuickWord::~QQuickWord()
@@ -57,11 +68,14 @@ void QQuickWord::ImportFiles()
 {
     /*SetVisible(WORD_IMPORT_WIDGET, true);
     SetVisible(WORD_EDIT_WIDGET, true);*/
-    QVector<QString> files = { 
-        "D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\import.docx",
-        //"D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test.docx",
-        //"D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test1.docx",
-    };
+    QStringList select_paths = QFileDialog::getOpenFileNames(
+        this, QString::fromLocal8Bit("选择导入文档"), "data",
+        QString::fromLocal8Bit("Word文档 (*.docx *.doc)"));
+    QVector<QString> files;
+    for (QString select_path : select_paths)
+    {
+        files.push_back(select_path);
+    }
     ImportFilesMgr::Instance().ImportFiles(files);
 }
 
@@ -77,20 +91,9 @@ void Test(TitleAreaContent* root) {
     }
 }
 
-void QQuickWord::ExportFiles()
+void QQuickWord::InstallFile(QString doc_id)
 {
-  /*  WordWriteOperate wwrite("D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test_write_2.docx");
-    const vector<ImportFileData>& files_data = ImportFilesMgr::Instance().GetFilesData();
-    wwrite.WriteToWord(files_data[0].root);*/
-
-    //WordTemplate* word_template = WordTemplateMgr::Instance().GetWordTemplate("RJYZRWS");
-    //if (word_template)
-    //{
-    //    TitleAreaContent* title_area = word_template->ContructTitleAreaContent(WordTemplateMode::Match_Mode);
-    //    WordExport::Module::InstancePtr()->SetTitleAreaContent(title_area);
-    //}
-
-    WordTemplate* word_template = WordTemplateMgr::Instance().GetWordTemplate("XQGGSM");
+    WordTemplate* word_template = WordTemplateMgr::Instance().GetWordTemplate(doc_id);
     if (word_template)
     {
         word_template->TryInstallContent();
@@ -98,9 +101,6 @@ void QQuickWord::ExportFiles()
         TitleAreaContent::RecurNumberTitleArea(title_area);
         TitleAreaContent::RecurSetConfigFormat(title_area);
         WordExport::Module::InstancePtr()->SetTitleAreaContent(title_area);
-
-        WordWriteOperate wwrite("D:\\CodeExp\\C++\\QQuickWord\\QQuickWord\\test_write_3.docx");
-        wwrite.WriteToWord(title_area);
     }
 }
 
@@ -108,12 +108,3 @@ void QQuickWord::ClearFiles()
 {
 }
 
-void QQuickWord::MatchFiles()
-{
-    const vector<ImportFileData> & files_data = ImportFilesMgr::Instance().GetFilesData();
-    if (files_data.size() > 0)
-    {
-        WordTemplate* word_template = WordTemplateMgr::Instance().GetWordTemplate("RJYZRWS");
-        bool ret = word_template->TryMatchAreaContent(files_data[0].root);
-    }
-}

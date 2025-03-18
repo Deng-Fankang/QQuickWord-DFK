@@ -12,7 +12,7 @@ public:
 	void ShowMenuPop(QPoint pos);
 
 private slots:
-	void TryMatchTemplate(QString doc_id, bool checked);
+	void TryMatchTemplate(QString doc_id);
 private:
 	QModelIndex operate_index;
 };

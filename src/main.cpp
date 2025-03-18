@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     
     if (WordConfig::InitWordConfig())
     {
-        WordTemplateMgr::Instance().SetTemplateDir("config/wordtemplate");
+        WordTemplateMgr::Instance().SetTemplateDir(WORD_TMP_PATH);
         QApplication a(argc, argv);
         ShowMainWindow();
         ModuleManager::Instance().Start();

@@ -26,10 +26,9 @@ public:
     void SetVisible(WordWidgetIndex idx, bool visible, bool retain_size=false);
 
     void ImportFiles();
-    void ExportFiles();
     void ClearFiles();
-    void MatchFiles();
 
+    void InstallFile(QString doc_id);
 public:
     Ui::QQuickWordClass ui;
 

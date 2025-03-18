@@ -28,15 +28,12 @@
      <string>文件</string>
     </property>
     <addaction name="actionimport"/>
-    <addaction name="actionexport"/>
-    <addaction name="actionmatch"/>
     <addaction name="actionclear"/>
    </widget>
    <widget class="QMenu" name="menutmplate">
     <property name="title">
      <string>模板</string>
     </property>
-    <addaction name="actionselect"/>
    </widget>
    <addaction name="menufile"/>
    <addaction name="menutmplate"/>

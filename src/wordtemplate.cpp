@@ -128,6 +128,10 @@ bool WordTemplate::TryMatchAreaContent(const TitleAreaContent* word_content)
 
 bool WordTemplate::TryInstallContent()
 {
+	if (is_install)
+	{
+		doc_indicator->ClearInstallContent();
+	}
 	is_install = doc_indicator->IterInstallContents();
 	if (is_install == false)
 	{

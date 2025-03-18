@@ -41,14 +41,14 @@ void FileListView::ShowMenuPop(QPoint pos)
 		bool checked = WordTemplateMgr::Instance().GetWordTemplate(doc_id)->IsMatch();
 		action->setChecked(WordTemplateMgr::Instance().GetWordTemplate(doc_id)->IsMatch());
 		connect(action, &QAction::triggered, this, [this, doc_id](bool checked) {
-			this->TryMatchTemplate(doc_id, checked);
+			this->TryMatchTemplate(doc_id);
 		});
 		tmp_menu->addAction(action);
 	}
 	menu->exec(mapToGlobal(pos));
 }
 
-void FileListView::TryMatchTemplate(QString doc_id, bool checked)
+void FileListView::TryMatchTemplate(QString doc_id)
 {
 	if (operate_index.isValid())
 	{

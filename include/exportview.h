@@ -21,6 +21,8 @@ private:
 	void SlotAppendItem(bool checked);
 	void SlotAppendChildItem(bool checked);
 
+	void ExportTitleArea(bool checked);
+
 private:
 	QModelIndex operate_index;
 };

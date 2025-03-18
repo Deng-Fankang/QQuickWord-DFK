@@ -5,6 +5,7 @@
 #include "qdebug.h"
 #include "qlinkedlist.h"
 
+#define WORD_TMP_PATH "config/wordtemplate"
 class TextFormat;
 extern const QVector<QString> HEADING_STYLE_NAME;
 extern const TextFormat DEFAULT_TEXT_AREA_FORMAT;
@@ -518,8 +519,9 @@ public:
 	const QList<AreaContent*>& GetContentList() const{ return content_list; }
 	const AreaContent* GetChildContent(int idx) const;
 	const QVector<int>& GetIndexFromRoot() const { return index_from_root; }
+	QString GetPrefixIndexString(QChar c) const;
 
-	int GetTitleLevel() { return level; }
+	int GetTitleLevel() const { return level; }
 
 	bool removeAreaContent(AreaContent* content);
 

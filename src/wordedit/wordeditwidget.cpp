@@ -23,7 +23,7 @@ namespace WordEdit {
 		char_format.setFont(font);
 		char_format.setFontWordSpacing(format.font.font_spacing);
 
-		block_format.setTextIndent(format.para_format.first_line_indent);
+		block_format.setTextIndent(format.para_format.first_line_indent + format.para_format.left_indent);
 	}
 
 	WordEditWidget::WordEditWidget(QWidget* parent)
@@ -92,10 +92,25 @@ namespace WordEdit {
 			const TitleAreaContent* title_content = dynamic_cast<const TitleAreaContent*>(area_content);
 			QTextBlockFormat block_format;
 			QTextCharFormat char_format;
-			SetTextFormat(title_content->title_format, block_format, char_format);
+			if (title_content->GetTitleLevel() > 0)
+			{
+				SetTextFormat(title_content->title_format, block_format, char_format);
+			}
+			else
+			{
+				if (title_content->GetChildTitleList().size() > 0)
+				{
+					SetTextFormat(title_content->GetChildTitleList().at(0)->title_format, block_format, char_format);
+					block_format.setAlignment(Qt::AlignHCenter);
+				}
+				
+			}
+			
 			QTextCursor cursor(text_edit->textCursor());
 			cursor.insertBlock(block_format, char_format);
-			cursor.insertText(title_content->title);
+			
+			QString title_prefix = title_content->GetPrefixIndexString('.');
+			cursor.insertText(title_prefix + ' ' + title_content->title);
 			for (const AreaContent* content : title_content->GetContentList())
 			{
 				SetRecurEditContent(text_edit, content);

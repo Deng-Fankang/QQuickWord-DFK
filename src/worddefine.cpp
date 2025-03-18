@@ -278,6 +278,16 @@ const AreaContent* TitleAreaContent::GetChildContent(int idx) const
     return nullptr;
 }
 
+QString TitleAreaContent::GetPrefixIndexString(QChar c) const
+{
+    QStringList sl;
+    for (int idx : index_from_root)
+    {
+        sl << QString::number(idx + 1);
+    }
+    return sl.join(c);
+}
+
 
 bool TitleAreaContent::removeAreaContent(AreaContent* content)
 {
@@ -354,8 +364,9 @@ void TitleAreaContent::RecurNumberTitleArea(TitleAreaContent* title_area_content
     
     for (int i = 0; i < title_area_content->child_title_list.size(); i++)
     {
-        index_from_root.push_back(i + 1);
-        RecurNumberTitleArea(title_area_content->child_title_list[i], index_from_root, level + 1);
+        QVector<int> tmp = index_from_root;
+        tmp.push_back(i);
+        RecurNumberTitleArea(title_area_content->child_title_list[i], tmp, level + 1);
     }
 }
 

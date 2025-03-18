@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_FileListView_t {
-    QByteArrayData data[5];
-    char stringdata0[46];
+    QByteArrayData data[4];
+    char stringdata0[38];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,12 +35,10 @@ static const qt_meta_stringdata_FileListView_t qt_meta_stringdata_FileListView =
 QT_MOC_LITERAL(0, 0, 12), // "FileListView"
 QT_MOC_LITERAL(1, 13, 16), // "TryMatchTemplate"
 QT_MOC_LITERAL(2, 30, 0), // ""
-QT_MOC_LITERAL(3, 31, 6), // "doc_id"
-QT_MOC_LITERAL(4, 38, 7) // "checked"
+QT_MOC_LITERAL(3, 31, 6) // "doc_id"
 
     },
-    "FileListView\0TryMatchTemplate\0\0doc_id\0"
-    "checked"
+    "FileListView\0TryMatchTemplate\0\0doc_id"
 };
 #undef QT_MOC_LITERAL
 
@@ -58,10 +56,10 @@ static const uint qt_meta_data_FileListView[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    2,   19,    2, 0x08 /* Private */,
+       1,    1,   19,    2, 0x08 /* Private */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QString, QMetaType::Bool,    3,    4,
+    QMetaType::Void, QMetaType::QString,    3,
 
        0        // eod
 };
@@ -72,7 +70,7 @@ void FileListView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         auto *_t = static_cast<FileListView *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->TryMatchTemplate((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
+        case 0: _t->TryMatchTemplate((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     }

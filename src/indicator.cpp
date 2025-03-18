@@ -28,21 +28,21 @@ bool DocIndicator::IterMatchAndSetContents(const TitleAreaContent* parent_area, 
 }
 
 
-void DocIndicator::ClearMatchContent()
-{
-	for (auto it = indicator_children.begin(); it != indicator_children.end(); it++)
-	{
-		(*it)->ClearMatchContent();
-	}
-}
-
-void DocIndicator::ClearInstallContent()
-{
-	for (auto it = indicator_children.begin(); it != indicator_children.end(); it++)
-	{
-		(*it)->ClearInstallContent();
-	}
-}
+//void DocIndicator::ClearMatchContent()
+//{
+//	for (auto it = indicator_children.begin(); it != indicator_children.end(); it++)
+//	{
+//		(*it)->ClearMatchContent();
+//	}
+//}
+//
+//void DocIndicator::ClearInstallContent()
+//{
+//	for (auto it = indicator_children.begin(); it != indicator_children.end(); it++)
+//	{
+//		(*it)->ClearInstallContent();
+//	}
+//}
 
 TitleAreaContent* DocIndicator::ContructTitleAreaContent(WordTemplateMode mode)
 {
@@ -92,13 +92,6 @@ TitleIndicator::TitleIndicator(NotLeafIndicator* parent_)
 {
 }
 
-void TitleIndicator::ClearMatchContent()
-{
-}
-
-void TitleIndicator::ClearInstallContent()
-{
-}
 
 bool TitleIndicator::IterMatchAndSetContents(const TitleAreaContent* parent_area, int& start_child_idx)
 {
@@ -280,13 +273,16 @@ bool MultiTemplateIndicator::IterMatchAndSetContents(const TitleAreaContent* par
 		{
 			break;
 		}
-	 	const AreaContent* area_content = parent_area->GetChildContent(iter_child_idx);
-		if (!property_stop_title.isEmpty() && area_content->GetAreaType() == TITLE_AREA)
+		if (iter_child_idx < parent_area->GetContentList().size())
 		{
-			const TitleAreaContent* title_area = dynamic_cast<const TitleAreaContent*>(area_content);
-			if (title_area->title == property_stop_title)
+			const AreaContent* area_content = parent_area->GetChildContent(iter_child_idx);
+			if (!property_stop_title.isEmpty() && area_content->GetAreaType() == TITLE_AREA)
 			{
-				break;
+				const TitleAreaContent* title_area = dynamic_cast<const TitleAreaContent*>(area_content);
+				if (title_area->title == property_stop_title)
+				{
+					break;
+				}
 			}
 		}
 	}
@@ -403,6 +399,22 @@ bool NotLeafIndicator::IterInstallContents()
 		}
 	}
 	return true;
+}
+
+void NotLeafIndicator::ClearMatchContent()
+{
+	for (auto it = indicator_children.begin(); it != indicator_children.end(); it++)
+	{
+		(*it)->ClearMatchContent();
+	}
+}
+
+void NotLeafIndicator::ClearInstallContent()
+{
+	for (auto it = indicator_children.begin(); it != indicator_children.end(); it++)
+	{
+		(*it)->ClearInstallContent();
+	}
 }
 
 
